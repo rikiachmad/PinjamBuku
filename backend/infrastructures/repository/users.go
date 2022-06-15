@@ -10,11 +10,11 @@ type UserRepository struct {
 	db *sql.DB
 }
 
-func NewUserRepository(db *sql.DB) *UserRepository {
+func NewUserRepository(db *sql.DB) domains.UserRepository{
 	return &UserRepository{db: db}
 }
 
-func (u *UserRepository) FetchUserByID(id int64) (*domains.User, error) {
+func (u *UserRepository) FetchUserByID(id int64) (domains.User, error) {
 	sqlStmt := `SELECT 
 	u.id,
 	u.fullname,
@@ -26,7 +26,7 @@ func (u *UserRepository) FetchUserByID(id int64) (*domains.User, error) {
 	ur.name
 	FROM users u INNER JOIN user_roles ur ON u.role_id = ur.id WHERE u.id = ?`
 
-	user := &domains.User{}
+	user := domains.User{}
 
 	row := u.db.QueryRow(sqlStmt, id)
 	err := row.Scan(
@@ -41,13 +41,13 @@ func (u *UserRepository) FetchUserByID(id int64) (*domains.User, error) {
 	)
 
 	if err != nil {
-		return nil, err
+		return domains.User{}, err
 	}
 
 	return user, nil
 }
 
-func (u *UserRepository) Login(email string, password string) (*domains.User, error) {
+func (u *UserRepository) Login(email string, password string) (domains.User, error) {
 	sqlStmt := `SELECT 
 	u.id,
 	u.fullname,
@@ -74,8 +74,8 @@ func (u *UserRepository) Login(email string, password string) (*domains.User, er
 	)
 
 	if err != nil {
-		return nil, err
+		return domains.User{}, err
 	}
 
-	return &user, nil
+	return user, nil
 }

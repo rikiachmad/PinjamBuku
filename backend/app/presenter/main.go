@@ -4,22 +4,29 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SuccessResponse(c *gin.Context, status int, data interface{}) error {
-	res := gin.H{
-		"status":  status,
-		"success": true,
-		"message": "Success",
-		"data":    data,
-	}
-	return c.JSON(status, &res)
+type BasicResponse struct {
+	Status  int         `json:"status"`
+	Success bool        `json:"success"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
 }
 
-func ErrorResponse(c *gin.Context, status int, err error) error {
-	res := gin.H{
-		"status":  status,
-		"success": false,
-		"message": err.Error(),
-		"data":    nil,
+func SuccessResponse(c *gin.Context, status int, data interface{}) {
+	res := BasicResponse {
+		Status:  status,
+		Success: true,
+		Message: "success",
+		Data:    data,
 	}
-	return c.JSON(status, &res)
+	c.JSON(status, res)
+}
+
+func ErrorResponse(c *gin.Context, status int, err error) {
+	res := BasicResponse {
+		Status:  status,
+		Success: false,
+		Message: err.Error(),
+		Data:    nil,
+	}
+	c.JSON(status, &res)
 }
