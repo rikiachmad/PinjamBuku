@@ -7,6 +7,6 @@ type User struct {
 	Email       string `db:"email"`
 	Password    string `db:"password"`
 	PhoneNumber string `db:"phone_number"`
-	Verified    string `db:"verified"`
+	Verified    string `db:"is_verified"`
 	Role        string `db:"role"`
 }
