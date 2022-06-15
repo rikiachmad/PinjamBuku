@@ -10,6 +10,9 @@ type User struct {
 	Verified    string `db:"is_verified"`
 	Role        string `db:"role"`
 	Token       string `db:"token"`
+	Photo       string `db:"picture_profile"`
+	CreatedAt   string `db:"created_at"`
+	UpdatedAt   string `db:"updated_at"`
 }
 
 type UserRepository interface {
