@@ -1,4 +1,4 @@
-package users
+package domains
 
 type User struct {
 	ID          int64  `db:"id"`
