@@ -9,4 +9,7 @@ type User struct {
 	PhoneNumber string `db:"phone_number"`
 	Verified    string `db:"is_verified"`
 	Role        string `db:"role"`
+	Photo       string `db:"picture_profile"`
+	CreatedAt   string `db:"created_at"`
+	UpdatedAt   string `db:"updated_at"`
 }
