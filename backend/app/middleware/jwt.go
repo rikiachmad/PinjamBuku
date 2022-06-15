@@ -22,14 +22,13 @@ type authCustomClaims struct {
 	jwt.StandardClaims
 }
 
-type jwtServices struct {
+type JwtServices struct {
 	secretKey string
 	issuer    string
 }
 
-//auth-jwt
 func JWTAuthService() JWTService {
-	return &jwtServices{
+	return &JwtServices{
 		secretKey: getSecretKey(),
 		issuer:    "PinjamBuku",
 	}
@@ -43,13 +42,13 @@ func getSecretKey() string {
 	return secret
 }
 
-func (service *jwtServices) GenerateToken(email string, isAdmin bool, isLibrary bool) string {
+func (service *JwtServices) GenerateToken(email string, isAdmin bool, isLibrary bool) string {
 	claims := &authCustomClaims{
 		email,
 		isAdmin,
 		isLibrary,
 		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 48).Unix(),
+			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
 			Issuer:    service.issuer,
 			IssuedAt:  time.Now().Unix(),
 		},
@@ -64,7 +63,7 @@ func (service *jwtServices) GenerateToken(email string, isAdmin bool, isLibrary 
 	return t
 }
 
-func (service *jwtServices) ValidateToken(encodedToken string) (*jwt.Token, error) {
+func (service *JwtServices) ValidateToken(encodedToken string) (*jwt.Token, error) {
 	return jwt.Parse(encodedToken, func(token *jwt.Token) (interface{}, error) {
 		if _, isvalid := token.Method.(*jwt.SigningMethodHMAC); !isvalid {
 			return nil, fmt.Errorf("Invalid token", token.Header["alg"])

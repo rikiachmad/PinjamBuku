@@ -9,4 +9,17 @@ type User struct {
 	PhoneNumber string `db:"phone_number"`
 	Verified    string `db:"is_verified"`
 	Role        string `db:"role"`
+	Token       string `db:"token"`
+	Photo       string `db:"picture_profile"`
+	CreatedAt   string `db:"created_at"`
+	UpdatedAt   string `db:"updated_at"`
+}
+
+type UserRepository interface {
+	FetchUserByID(id int64) (User, error)
+	Login(email string, password string) (User, error)
+}
+
+type UserUsecase interface {
+	Login(user User) (User, error)
 }
