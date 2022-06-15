@@ -20,8 +20,8 @@ func main() {
             address VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL,
             password VARCHAR(255) NOT NULL,
-			is_verified DATETIME,
-			role_id INTEGER,
+			verified_date DATETIME,
+			role_id INTEGER NOT NULL,
             phone_number VARCHAR(255) NOT NULL,
 			FOREIGN KEY(role_id) REFERENCES user_roles(id)
         );
