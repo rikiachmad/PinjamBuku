@@ -1,8 +1,6 @@
 package usecases
 
 import (
-	"fmt"
-
 	"github.com/rg-km/final-project-engineering-16/backend/app/middleware"
 	"github.com/rg-km/final-project-engineering-16/backend/commons/exceptions"
 	"github.com/rg-km/final-project-engineering-16/backend/domains"
@@ -21,7 +19,6 @@ func NewAuthUsecase(repo domains.UserRepository, tokenAuth middleware.JWTService
 }
 
 func (a AuthUsecase) Login(user domains.User) (domains.User, error) {
-	fmt.Printf("user:\n%+v\n", user)
 	user, err := a.Repo.Login(user.Email, user.Password)
 	if err != nil {
 		return user, err
@@ -37,7 +34,6 @@ func (a AuthUsecase) Login(user domains.User) (domains.User, error) {
 func (a AuthUsecase) Register(user domains.CreateUser) (domains.User, error) {
 	isEmailExist := a.Repo.CheckAccountEmail(user.Email)
 	if isEmailExist {
-		fmt.Printf("%s\nEmail %+v is already exist\n", user.Email, isEmailExist)
 		return domains.User{}, exceptions.ErrUserAlreadyExists
 	}
 

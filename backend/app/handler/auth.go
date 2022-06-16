@@ -2,7 +2,6 @@ package handler
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -50,7 +49,6 @@ type AuthController struct {
 	authUsecase domains.AuthUsecase
 }
 
-// NewAuthController creates new user controller
 func NewAuthController(authUsecase domains.AuthUsecase) AuthController {
 	return AuthController{
 		authUsecase: authUsecase,
@@ -63,15 +61,13 @@ func (a AuthController) SignIn(c *gin.Context) {
 		presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
 		return
 	}
-	// fmt.Printf("%+v\n", req)
+	
 	domain := req.ToUserDomain()
-	// fmt.Printf("%+v\n", domain)
 	res, err := a.authUsecase.Login(domain)
-	fmt.Printf("res %+v\n", res)
-	resFromDomain := presenter.AuthFromDomain(res)
+	resFromDomain := presenter.LoginFromDomain(res)
 	if err != nil {
 		if errors.Is(err, exceptions.ErrInvalidCredentials) {
-			presenter.ErrorResponse(c, http.StatusConflict, exceptions.ErrInvalidCredentials)
+			presenter.ErrorResponse(c, http.StatusUnauthorized, exceptions.ErrInvalidCredentials)
 			return
 		}
 		presenter.ErrorResponse(c, http.StatusInternalServerError, exceptions.ErrInternalServerError)
@@ -89,22 +85,17 @@ func (a AuthController) Register(c *gin.Context) {
 		presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
 		return
 	}
-	// fmt.Printf("%+v\n", req)
 	domain := req.ToCreateUserDomain()
-	fmt.Printf("%+v\n", domain)
 	res, err := a.authUsecase.Register(domain)
-	fmt.Printf("res %+v\n", res)
-	resFromDomain := presenter.AuthFromDomain(res)
 	if err != nil {
-		if errors.Is(err, exceptions.ErrInvalidCredentials) {
-			presenter.ErrorResponse(c, http.StatusConflict, exceptions.ErrInvalidCredentials)
+		if errors.Is(err, exceptions.ErrUserAlreadyExists) {
+			presenter.ErrorResponse(c, http.StatusConflict, exceptions.ErrUserAlreadyExists)
 			return
 		}
-		presenter.ErrorResponse(c, http.StatusInternalServerError, exceptions.ErrInternalServerError)
+		presenter.ErrorResponse(c, http.StatusInternalServerError, err)
 		return
 	}
-	cookie := helpers.CreateCookie(resFromDomain.Token)
-	c.SetCookie(cookie.Name, cookie.Value, cookie.MaxAge, cookie.Path, cookie.Domain, cookie.Secure, cookie.HttpOnly)
+	resFromDomain := presenter.CreateUserFromDomain(res)
 
 	presenter.SuccessResponse(c, http.StatusOK, resFromDomain)
 }

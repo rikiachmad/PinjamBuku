@@ -2,10 +2,10 @@ package repository
 
 import (
 	"database/sql"
-	"fmt"
 	"time"
 
-	middleware "github.com/rg-km/final-project-engineering-16/backend/app/middleware"
+	exceptions "github.com/rg-km/final-project-engineering-16/backend/commons/exceptions"
+	helpers "github.com/rg-km/final-project-engineering-16/backend/commons/helpers"
 	domains "github.com/rg-km/final-project-engineering-16/backend/domains"
 )
 
@@ -49,11 +49,7 @@ func (u *UserRepository) FetchUserByID(id int64) (domains.User, error) {
 }
 
 func (u *UserRepository) Login(email string, password string) (domains.User, error) {
-	sqlStmt := `SELECT 
-	fullname,
-	email
-	FROM users 
-	WHERE email = ? AND password = ?`
+	sqlStmt := `SELECT fullname, email, password FROM users WHERE email = ?`
 
 	user := domains.User{}
 
@@ -61,10 +57,15 @@ func (u *UserRepository) Login(email string, password string) (domains.User, err
 	err := row.Scan(
 		&user.Fullname,
 		&user.Email,
+		&user.Password,
 	)
 
 	if err != nil {
 		return domains.User{}, err
+	}
+
+	if !helpers.IsMatched(user.Password, password) {
+		return domains.User{}, exceptions.ErrInvalidCredentials
 	}
 
 	return user, nil
@@ -72,7 +73,7 @@ func (u *UserRepository) Login(email string, password string) (domains.User, err
 
 func (u *UserRepository) Create(fullname, email, password, address, phoneNumber string, role int) (domains.User, error) {
 	var user domains.User
-	passEncrypt, err := middleware.HashPassword(password)
+	passEncrypt, err := helpers.HashPassword(password)
 
 	if err != nil {
 		return domains.User{}, err
@@ -98,7 +99,6 @@ func (u *UserRepository) Create(fullname, email, password, address, phoneNumber 
 	)
 
 	if err != nil {
-		fmt.Println("error: ", err)
 		return domains.User{}, err
 	}
 
