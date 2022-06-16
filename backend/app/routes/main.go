@@ -7,7 +7,7 @@ type Route interface {
 }
 
 func NewRoutes(
-	authRoutes *AuthRoutes,
+	authRoutes AuthRoutes,
 ) Routes {
 	return Routes{
 		authRoutes,

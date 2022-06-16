@@ -16,6 +16,7 @@ import (
 
 func main() {
 	_ = godotenv.Load()
+	router := gin.Default()
 
 	db, err := sql.Open("sqlite3", "backend/infrastructures/database/pinjambuku.db")
 	if err != nil {
@@ -25,12 +26,11 @@ func main() {
 	userRepository := repository.NewUserRepository(db)
 	userUsecase := usecases.NewUserUsecase(userRepository)
 	authController := handler.NewAuthController(userUsecase)
-	authRoutes := routes.NewAuthRoutes(routes.RequestHandler{Gin: &gin.Engine{}}, authController)
+	authRoutes := routes.NewAuthRoutes(routes.RequestHandler{Gin: router}, authController)
 
-	routes := routes.NewRoutes(&authRoutes)
+	routes := routes.NewRoutes(authRoutes)
 	routes.Setup()
 
-	router := gin.Default()
 	err = router.Run(":" + "8000")
 	if err != nil {
 		log.Fatal(err)
