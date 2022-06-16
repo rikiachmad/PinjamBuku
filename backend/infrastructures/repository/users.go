@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"fmt"
 	"time"
 
 	middleware "github.com/rg-km/final-project-engineering-16/backend/app/middleware"
@@ -69,24 +70,25 @@ func (u *UserRepository) Login(email string, password string) (domains.User, err
 	return user, nil
 }
 
-func (u *UserRepository) Create(fullname, email, password, address, phoneNumber string, role int) (*domains.User, error) {
+func (u *UserRepository) Create(fullname, email, password, address, phoneNumber string, role int) (domains.User, error) {
 	var user domains.User
 	passEncrypt, err := middleware.HashPassword(password)
 
 	if err != nil {
-		return &domains.User{}, err
+		return domains.User{}, err
 	}
 
 	sqlStmt := `
-	INSERT INTO users(fullname, address, email, password, verified_date, role_id, phone_number, picture_profile, created_at, updated_at) 
-	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		INSERT INTO users(fullname, address, email, password, verified_date, role_id, phone_number, picture_profile, created_at, updated_at) 
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) 
+		RETURNING id, fullname, address, email, phone_number, verified_date, role_id, picture_profile, created_at, updated_at
 	`
 
 	err = u.db.QueryRow(sqlStmt, fullname, address, email, passEncrypt, "", role, phoneNumber, "", time.Now(), time.Now()).Scan(
+		&user.ID,
 		&user.Fullname,
 		&user.Address,
 		&user.Email,
-		&user.Password,
 		&user.Verified,
 		&user.Role,
 		&user.PhoneNumber,
@@ -96,21 +98,22 @@ func (u *UserRepository) Create(fullname, email, password, address, phoneNumber 
 	)
 
 	if err != nil {
-		return &domains.User{}, err
+		fmt.Println("error: ", err)
+		return domains.User{}, err
 	}
 
-	return &domains.User{}, nil
+	return user, nil
 }
 
 func (u *UserRepository) CheckAccountEmail(email string) bool {
+	var res string
 	sqlSmt := `SELECT email FROM users WHERE email = ?`
 
-	err := u.db.QueryRow(sqlSmt, email).Scan(&email)
+	err := u.db.QueryRow(sqlSmt, email).Scan(&res)
 	if err != nil {
 		if err != sql.ErrNoRows {
 			return false
 		}
 	}
-
-	return true
+	return res == email
 }
