@@ -25,6 +25,8 @@ func main() {
 			role_id INTEGER NOT NULL,
             phone_number VARCHAR(255) NOT NULL,
 			picture_profile VARCHAR(255),
+			no_ktp VARCHAR(255),
+			picture_ktp VARCHAR(255),
 			created_at DATETIME,
 			updated_at DATETIME,
 			FOREIGN KEY(role_id) REFERENCES user_roles(id)
