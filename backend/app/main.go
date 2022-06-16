@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/rg-km/final-project-engineering-16/backend/app/handler"
+	"github.com/rg-km/final-project-engineering-16/backend/app/middleware"
 	"github.com/rg-km/final-project-engineering-16/backend/app/routes"
 	"github.com/rg-km/final-project-engineering-16/backend/infrastructures/repository"
 	"github.com/rg-km/final-project-engineering-16/backend/usecases"
@@ -18,13 +19,14 @@ func main() {
 	_ = godotenv.Load()
 	router := gin.Default()
 
-	db, err := sql.Open("sqlite3", "backend/infrastructures/database/pinjambuku.db")
+	db, err := sql.Open("sqlite3", "pinjambuku.db")
 	if err != nil {
 		panic(err)
 	}
 
+	tokenAuthService := middleware.JWTAuthService()
 	userRepository := repository.NewUserRepository(db)
-	userUsecase := usecases.NewUserUsecase(userRepository)
+	userUsecase := usecases.NewAuthUsecase(userRepository, tokenAuthService)
 	authController := handler.NewAuthController(userUsecase)
 	authRoutes := routes.NewAuthRoutes(routes.RequestHandler{Gin: router}, authController)
 

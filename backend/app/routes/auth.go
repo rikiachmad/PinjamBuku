@@ -21,6 +21,7 @@ func (s AuthRoutes) Setup() {
 	auth := s.handler.Gin.Group("/auth")
 	{
 		auth.POST("/login", s.authController.SignIn)
+		auth.POST("/register", s.authController.Register)
 	}
 }
 
