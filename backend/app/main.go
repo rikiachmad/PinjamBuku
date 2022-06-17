@@ -33,7 +33,7 @@ func main() {
 	routes := routes.NewRoutes(authRoutes)
 	routes.Setup()
 
-	err = router.Run(":" + "8000")
+	err = router.Run(":" + "8080")
 	if err != nil {
 		log.Fatal(err)
 	}
