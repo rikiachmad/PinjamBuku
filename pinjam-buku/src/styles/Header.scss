@@ -1,0 +1,54 @@
+.navbar {
+    font-family: 'Poppins', sans-serif;
+
+    .container {
+        .logo {
+            color: #5C79C5;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .collapse {
+
+            .nav-link {
+                color: black;
+
+                &:hover {
+                    text-decoration: underline #5C79C5 3px;
+                }
+
+                .btn {
+                    width: 125%;
+                    font-size: 15px;
+                }
+
+                .login {
+                    background-color: white;
+                    color: #5C79C5;
+                    font-weight: 600;
+                    border-radius: 10px;
+                    border: #5C79C5 solid 1px;
+                    box-shadow: 0 4px 5px -2px #969696;
+                    letter-spacing: 1px;
+                    &:hover {
+                        background-color: #ececec;
+                    }
+                }
+
+                .signup {
+                    background-color: #5C79C5;
+                    color: white;
+                    font-weight: 600;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 5px -2px #969696;
+                    letter-spacing: 1px;
+                    &:hover {
+                        background-color: #90a8e6;
+                        border: #90a8e6 solid 1px;
+                    }
+                }
+
+            }
+        }
+    }
+}
