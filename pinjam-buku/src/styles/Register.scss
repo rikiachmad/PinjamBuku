@@ -40,15 +40,31 @@ figure {
         h1 {
             font-size: 1.7rem;
             font-weight: 600;
+            .btn-back {
+                width: 10%;
+                background-color: white;
+                border: none;   
+                padding: 0;             
+                margin: 0;
+                .fa-left {
+                    width: 1.1em;
+                    height: 2em;
+                    color: rgb(104, 104, 104);
+                    display: flex;
+                    justify-content: flex-start;
+                }
+            }
         }
 
         p {
             font-size: 15px;
             a {
                 color: #5C79C5;
-            }
-            a:hover {
-                text-decoration: underline;
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: underline;
+                }
             }
         }
 

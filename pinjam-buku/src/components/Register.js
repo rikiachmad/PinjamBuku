@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
+import { FaArrowLeft } from 'react-icons/fa'
 import '../styles/Register.css'
 
 export default function Register() {
@@ -8,6 +9,9 @@ export default function Register() {
     const { watch, register, handleSubmit, formState: { isValid } } = useForm({ mode: "all" })
     const completeFormRegist = () => {
         setFormRegist(cur => cur + 1)
+    }
+    const backFormRegist = () => {
+        setFormRegist(cur => cur - 1)
     }
     const renderButton = () => {
         if (formRegist > 2) {
@@ -52,7 +56,7 @@ export default function Register() {
                                         {formRegist >= 0 && (
                                             <section style={{ display: formRegist === 0 ? "block" : "none" }}>
                                                 <h1>Daftar Sekarang</h1><br />
-                                                <p>Sudah punya akun PinjamBuku? <a href="/login">Masuk</a></p> <br />
+                                                <p>Sudah punya akun PinjamBuku? <a href="/login" class="login">Masuk</a></p> <br />
                                                 <Form.Group className="mb-3" controlId="formBasicEmail">
                                                     <Form.Label>Email</Form.Label>
                                                     <Form.Control type="email" name="email" {...register("email", { required: { value: true } })} />
@@ -67,7 +71,9 @@ export default function Register() {
 
                                         {formRegist >= 1 && (
                                             <section style={{ display: formRegist === 1 ? "block" : "none" }}>
-                                                <h1>Isi Data Diri</h1><br />
+                                                <h1>
+                                                    <Button className="btn-back" onClick={backFormRegist}><FaArrowLeft className="fa-left" /></Button> Isi Data Diri
+                                                </h1><br />
                                                 <Form.Group className="mb-3" controlId="formBasicName">
                                                     <Form.Label>Nama Lengkap</Form.Label>
                                                     <Form.Control type="text" name="fullname" {...register("fullname", { required: { value: true } })} />
@@ -87,7 +93,10 @@ export default function Register() {
 
                                         {formRegist >= 2 && (
                                             <section style={{ display: formRegist === 2 ? "block" : "none" }}>
-                                                <h1>Isi Data Diri</h1><br />
+                                                <h1>
+                                                    <Button className="btn-back" onClick={backFormRegist}><FaArrowLeft className="fa-left" /></Button>
+                                                    Isi Data Diri
+                                                </h1><br />
                                                 <Form.Group className="mb-3" controlId="formBasicNoKTP">
                                                     <Form.Label>No. KTP</Form.Label>
                                                     <Form.Control type="number" name="no_ktp" {...register("no_ktp", { required: { value: true } })} />
