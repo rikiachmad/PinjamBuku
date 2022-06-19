@@ -105,7 +105,7 @@ func main() {
 			user_id INTEGER NOT NULL,
 			book_id INTEGER NOT NULL,
 			created_at DATETIME,
-			updated_at DATETIME,
+			deleted_at DATETIME,
 			FOREIGN KEY(user_id) REFERENCES users(id),
 			FOREIGN KEY(book_id) REFERENCES books(id)
 		);
