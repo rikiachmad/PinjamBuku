@@ -18,7 +18,7 @@ func InitRoutesAuth(db *sql.DB, route *gin.Engine) {
 
 	apiv1 := route.Group("/api/v1")
 	{
-		auth := apiv1.Group("/auth/")
+		auth := apiv1.Group("/auth")
 		{
 			auth.POST("/login", authController.SignIn)
 			auth.POST("/register", authController.Register)
