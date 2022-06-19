@@ -47,24 +47,41 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	
+
 	_, err = db.Exec(`INSERT INTO user_roles (name) VALUES ("ADMIN"), ("USER");`)
-	
+
 	if err != nil {
 		panic(err)
 	}
-	
+
 	_, err = db.Exec(`
 		CREATE TABLE IF NOT EXISTS libraries (
 			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			name VARCHAR(255) NOT NULL,
+			email VARCHAR(255) NOT NULL,
+			password VARCHAR(255) NOT NULL,
 			address VARCHAR(255) NOT NULL,
 			phone_number VARCHAR(255) NOT NULL,
-			verified_date DATETIME,
+			picture_profile VARCHAR(255) NOT NULL,
+			account_id INTEGER NOT NULL,
 			created_at DATETIME,
-			updated_at DATETIME
+			updated_at DATETIME,
+			FOREIGN KEY(account_id) REFERENCES bank_accounts(id)
 		);
 	`)
+
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = db.Exec(`
+        CREATE TABLE IF NOT EXISTS bank_accounts (
+            id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+			name VARCHAR(256) NOT NULL,
+			number VARCHAR(256) NOT NULL,
+			bank_name VARCHAR(256) NOT NULL
+        );
+    `)
 
 	if err != nil {
 		panic(err)
@@ -85,6 +102,12 @@ func Rollback(db *sql.DB) {
 	}
 
 	sqlStmt = `DROP TABLE libraries;`
+	_, err = db.Exec(sqlStmt)
+	if err != nil {
+		panic(err)
+	}
+
+	sqlStmt = `DROP TABLE bank_accounts;`
 	_, err = db.Exec(sqlStmt)
 	if err != nil {
 		panic(err)
