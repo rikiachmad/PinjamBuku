@@ -26,3 +26,7 @@ type CreateLibrary struct {
 	AccountName   string `db:"account_name"`
 	BankName      string `db:"bank_name"`
 }
+
+type LibraryRepository interface {
+	Login(email string, password string) (Library, error)
+}

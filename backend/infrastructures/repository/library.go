@@ -11,10 +11,8 @@ type LibraryRepository struct {
 	db *sql.DB
 }
 
-func NewLibraryRepository(db *sql.DB) LibraryRepository {
-	return LibraryRepository{
-		db: db,
-	}
+func NewLibraryRepository(db *sql.DB) domains.LibraryRepository {
+	return &LibraryRepository{db: db}
 }
 
 func (l *LibraryRepository) Login(email string, password string) (domains.Library, error) {
