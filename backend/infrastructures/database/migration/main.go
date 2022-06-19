@@ -46,7 +46,10 @@ func main() {
 	}
 
 	_, err = db.Exec(`INSERT INTO user_roles (name) VALUES ("ADMIN"), ("USER");`)
+<<<<<<< HEAD
 
+=======
+>>>>>>> 69a15fe... feat: add migration for book_categories, books, and carts tables
 	if err != nil {
 		panic(err)
 	}
