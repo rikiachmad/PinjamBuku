@@ -4,15 +4,10 @@ import (
 	"database/sql"
 	"log"
 
-	"github.com/rg-km/final-project-engineering-16/backend/app/handler"
-	"github.com/rg-km/final-project-engineering-16/backend/app/middleware"
-	"github.com/rg-km/final-project-engineering-16/backend/app/routes"
-	"github.com/rg-km/final-project-engineering-16/backend/infrastructures/repository"
-	"github.com/rg-km/final-project-engineering-16/backend/usecases"
-
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/rg-km/final-project-engineering-16/backend/app/routes"
 )
 
 func main() {
@@ -24,14 +19,7 @@ func main() {
 		panic(err)
 	}
 
-	tokenAuthService := middleware.JWTAuthService()
-	userRepository := repository.NewUserRepository(db)
-	userUsecase := usecases.NewAuthUsecase(userRepository, tokenAuthService)
-	authController := handler.NewAuthController(userUsecase)
-	authRoutes := routes.NewAuthRoutes(routes.RequestHandler{Gin: router}, authController)
-
-	routes := routes.NewRoutes(authRoutes)
-	routes.Setup()
+	routes.InitRoutesAuth(db, router)
 
 	err = router.Run(":" + "8080")
 	if err != nil {

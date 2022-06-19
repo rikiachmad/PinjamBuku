@@ -1,37 +1,28 @@
 package routes
 
 import (
-	"github.com/rg-km/final-project-engineering-16/backend/app/handler"
+	"database/sql"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rg-km/final-project-engineering-16/backend/app/handler"
+	"github.com/rg-km/final-project-engineering-16/backend/app/middleware"
+	"github.com/rg-km/final-project-engineering-16/backend/infrastructures/repository"
+	"github.com/rg-km/final-project-engineering-16/backend/usecases"
 )
 
-type RequestHandler struct {
-	Gin *gin.Engine
-}
+func InitRoutesAuth(db *sql.DB, route *gin.Engine) {
+	tokenAuthService := middleware.JWTAuthService()
+	userRepository := repository.NewUserRepository(db)
+	userUsecase := usecases.NewAuthUsecase(userRepository, tokenAuthService)
+	authController := handler.NewAuthController(userUsecase)
 
-// AuthRoutes struct
-type AuthRoutes struct {
-	handler        RequestHandler
-	authController handler.AuthController
-}
-
-// Setup user routes
-func (s AuthRoutes) Setup() {
-	auth := s.handler.Gin.Group("/auth")
+	apiv1 := route.Group("/api/v1")
 	{
-		auth.POST("/login", s.authController.SignIn)
-		auth.POST("/register", s.authController.Register)
-	}
-}
+		auth := apiv1.Group("/auth/")
+		{
+			auth.POST("/login", authController.SignIn)
+			auth.POST("/register", authController.Register)
+		}
 
-// NewAuthRoutes creates new user controller
-func NewAuthRoutes(
-	handler RequestHandler,
-	authController handler.AuthController,
-) AuthRoutes {
-	return AuthRoutes{
-		handler:        handler,
-		authController: authController,
 	}
 }
