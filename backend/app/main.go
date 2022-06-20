@@ -14,7 +14,7 @@ func main() {
 	_ = godotenv.Load()
 	router := gin.Default()
 
-	db, err := sql.Open("sqlite3", "pinjambuku.db")
+	db, err := sql.Open("sqlite3", "./pinjambuku.db")
 	if err != nil {
 		panic(err)
 	}
