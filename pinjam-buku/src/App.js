@@ -1,13 +1,15 @@
 import React from 'react'
-import Header from "./components/Header";
-import Register from "./components/Register";
-import './App.css';
+import { Routes, Route, Link } from "react-router-dom";
+import Register from "./account/Register";
+import Home from './user/Home';
 
 function App() {
   return (
     <div className="App">
-      <Header />
-      <Register />
+      <Routes>        
+        <Route index element={<Home />} />
+        <Route path="daftar" element={<Register />} />
+      </Routes>
     </div>
   );
 }

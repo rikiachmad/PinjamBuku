@@ -2,18 +2,19 @@
     font-family: 'Open Sans', sans-serif;
 }
 
-figure {
+.logo-regist {
     top: 5rem;
     width: 110%;
 
-    figcaption {
+    .text-regist {
         width: 70%;
         position: absolute;
         top: 45%;
-        left: 64%;
+        left: 63%;
         transform: translate(-50%, -50%);
         font-size: 24px;
         font-weight: bold;
+        text-align: center;
 
         span {
             font-size: 2.5rem;

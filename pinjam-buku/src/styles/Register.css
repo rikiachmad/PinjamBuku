@@ -2,20 +2,21 @@
   font-family: "Open Sans", sans-serif;
 }
 
-figure {
+.logo-regist {
   top: 5rem;
   width: 110%;
 }
-figure figcaption {
+.logo-regist .text-regist {
   width: 70%;
   position: absolute;
   top: 45%;
-  left: 64%;
+  left: 63%;
   transform: translate(-50%, -50%);
   font-size: 24px;
   font-weight: bold;
+  text-align: center;
 }
-figure figcaption span {
+.logo-regist .text-regist span {
   font-size: 2.5rem;
   font-weight: bold;
   color: #5C79C5;
