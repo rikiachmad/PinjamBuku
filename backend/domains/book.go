@@ -35,6 +35,7 @@ type BookRepository interface {
 	// Update(title, author, description, cover string, pageNumber, stock, deposit, categoryId, id int64) (Book, error)
 	GetAll() ([]Book, error)
 	GetById(id int64) (Book, error)
+	GetSortByTitle(words string) ([]Book, error)
 }
 
 type BookUsecase interface {
