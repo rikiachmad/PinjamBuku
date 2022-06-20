@@ -11,6 +11,7 @@ type Library struct {
 	AccountNumber string `db:"account_number"`
 	AccountName   string `db:"account_name"`
 	BankName      string `db:"bank_name"`
+	Token         string `db:"token"`
 	CreatedAt     string `db:"created_at"`
 	UpdatedAt     string `db:"updated_at"`
 }
