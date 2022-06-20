@@ -14,12 +14,13 @@ func main() {
 	_ = godotenv.Load()
 	router := gin.Default()
 
-	db, err := sql.Open("sqlite3", "pinjambuku.db")
+	db, err := sql.Open("sqlite3", "../infrastructures/database/migration/pinjambuku.db")
 	if err != nil {
 		panic(err)
 	}
 
 	routes.InitRoutesAuth(db, router)
+	routes.InitRoutesBook(db, router)
 
 	err = router.Run(":" + "8080")
 	if err != nil {
