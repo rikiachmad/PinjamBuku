@@ -49,3 +49,16 @@ func (b BookUsecase) Insert(book domains.CreateBook) (domains.Book, error) {
 
 	return books, nil
 }
+
+func (b BookUsecase) FetchSearchBook(by, words string) ([]domains.Book, error) {
+
+	books, err := b.Repo.GetSearchByTitle(words)
+
+	if err != nil {
+		log.Printf("error usecases-book FetchSearchBook %s", err)
+		return []domains.Book{}, err
+	}
+
+	return books, nil
+
+}

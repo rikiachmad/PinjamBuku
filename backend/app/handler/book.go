@@ -135,3 +135,30 @@ func (b BookController) InsertBook(c *gin.Context) {
 
 	presenter.SuccessResponse(c, http.StatusCreated, nil)
 }
+
+func (b BookController) GetSearchBook(c *gin.Context) {
+	key := c.Query("q")
+	words := c.Query("w")
+
+	res, err := b.bookUsecase.FetchSearchBook(key, words)
+
+	if key == "title" {
+
+		if err != nil {
+			log.Printf("error handler-book GetSearchBook %v", err)
+			presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrInternalServerError)
+			return
+		}
+
+		response := make([]presenter.Book, len(res))
+
+		for i, book := range res {
+			response[i] = presenter.FetchBookDefault(book)
+		}
+
+		presenter.SuccessResponse(c, http.StatusOK, response)
+		return
+	}
+
+	presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
+}

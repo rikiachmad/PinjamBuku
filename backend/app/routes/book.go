@@ -27,6 +27,9 @@ func InitRoutesBook(db *sql.DB, route *gin.Engine) {
 		{
 			auth.POST("/", bookController.InsertBook)
 		}
+		{
+			auth.GET("/search", bookController.GetSearchBook)
+		}
 
 	}
 }

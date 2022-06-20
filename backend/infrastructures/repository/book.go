@@ -166,7 +166,7 @@ func (b *BookRepository) GetAll() ([]domains.Book, error) {
 	return books, nil
 }
 
-func (b *BookRepository) GetSortByTitle(words string) ([]domains.Book, error) {
+func (b *BookRepository) GetSearchByTitle(words string) ([]domains.Book, error) {
 	var books []domains.Book
 
 	sqlStmt := `
@@ -185,7 +185,7 @@ func (b *BookRepository) GetSortByTitle(words string) ([]domains.Book, error) {
 		INNER JOIN book_categories bc ON b.category_id = bc.id
 		INNER JOIN libraries l ON b.library_id = l.id
 		WHERE 
-			b.title LIKE ? AND b.is_publish != false
+			b.title LIKE ? 
 	`
 	likeWords := `%` + words + `%`
 	rows, err := b.db.Query(sqlStmt, likeWords)
