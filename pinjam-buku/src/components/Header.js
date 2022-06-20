@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from "react-router-dom"
 import { Navbar, Container, Nav, Button } from 'react-bootstrap'
-import '../styles/Header.css'
+import '../styles/user/Header/Header.css'
 
 export default function Header() {
     return (

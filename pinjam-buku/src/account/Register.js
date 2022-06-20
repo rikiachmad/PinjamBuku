@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
 import { FaArrowLeft } from 'react-icons/fa'
-import '../styles/Register.css'
+import '../styles/user/Register/Register.css'
 import Swal from 'sweetalert2'
 
 export default function Register() {

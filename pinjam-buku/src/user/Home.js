@@ -3,7 +3,7 @@ import Header from '../components/Header';
 import { useForm } from 'react-hook-form'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
 import { MdOutlineTouchApp, MdOutlineLocalLibrary, MdPayment } from "react-icons/md";
-import '../styles/Home.css'
+import '../styles/user/Home/Home.css'
 
 export default function Home() {
     return (
