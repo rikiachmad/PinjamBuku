@@ -1,6 +1,8 @@
 package usecases
 
 import (
+	"fmt"
+
 	"github.com/rg-km/final-project-engineering-16/backend/commons/exceptions"
 	"github.com/rg-km/final-project-engineering-16/backend/domains"
 )
@@ -24,6 +26,7 @@ func (c CartUsecase) ShowCartByUserID(userID int64) ([]domains.Cart, error) {
 }
 
 func (c CartUsecase) InsertToCart(userID, bookID int64) (domains.Cart, error) {
+	fmt.Printf("userID: %d, bookID: %d\n", userID, bookID)
 	if userID == 0 || bookID == 0 {
 		return domains.Cart{}, exceptions.ErrBadRequest
 	}

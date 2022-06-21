@@ -40,11 +40,15 @@ func (cc CartController) InsertToCart(c *gin.Context) {
 	
 	domain := req.ToCartDomain()
 	res, err := cc.cartUsecase.InsertToCart(domain.UserID, domain.BookID)
-	resFromDomain := presenter.InsertCartFromDomain(res)
 	if err != nil {
+		if err == exceptions.ErrBadRequest {
+			presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
+			return
+		}
 		presenter.ErrorResponse(c, http.StatusInternalServerError, exceptions.ErrInternalServerError)
 		return
 	}
+	resFromDomain := presenter.InsertCartFromDomain(res)
 
 	presenter.SuccessResponse(c, http.StatusOK, resFromDomain)
 }

@@ -46,13 +46,6 @@ func main() {
 	}
 
 	_, err = db.Exec(`INSERT INTO user_roles (name) VALUES ("ADMIN"), ("USER");`)
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> 69a15fe... feat: add migration for book_categories, books, and carts tables
-=======
->>>>>>> c88fa99f46a1e24233453e26ebfeb0d4e49c7b9d
 	if err != nil {
 		panic(err)
 	}
@@ -65,7 +58,6 @@ func main() {
 			password VARCHAR(255) NOT NULL,
 			address VARCHAR(255) NOT NULL,
 			phone_number VARCHAR(255) NOT NULL,
-<<<<<<< HEAD
 			picture_profile VARCHAR(255) NOT NULL,
 			account_id INTEGER NOT NULL,
 			created_at DATETIME,
@@ -81,8 +73,6 @@ func main() {
 		CREATE TABLE IF NOT EXISTS book_categories (
 			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			name VARCHAR(255) NOT NULL,
-=======
->>>>>>> c88fa99f46a1e24233453e26ebfeb0d4e49c7b9d
 			created_at DATETIME,
 			updated_at DATETIME
 		);
@@ -92,8 +82,6 @@ func main() {
 	}
 
 	_, err = db.Exec(`
-<<<<<<< HEAD
-=======
 		CREATE TABLE IF NOT EXISTS book_categories (
 			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			name VARCHAR(255) NOT NULL,
@@ -106,7 +94,6 @@ func main() {
 	}
 
 	_, err = db.Exec(`
->>>>>>> c88fa99f46a1e24233453e26ebfeb0d4e49c7b9d
 		CREATE TABLE IF NOT EXISTS books (
 			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			katalog_id VARCHAR(10) NOT NULL,
@@ -241,15 +228,12 @@ func Rollback(db *sql.DB) {
 		panic(err)
 	}
 
-<<<<<<< HEAD
 	sqlStmt = `DROP TABLE bank_accounts;`
 	_, err = db.Exec(sqlStmt)
 	if err != nil {
 		panic(err)
 	}
 
-=======
->>>>>>> c88fa99f46a1e24233453e26ebfeb0d4e49c7b9d
 	sqlStmt = `DROP TABLE book_categories;`
 	_, err = db.Exec(sqlStmt)
 	if err != nil {

@@ -16,7 +16,7 @@ func NewCartRepository(db *sql.DB) domains.CartRepository {
 
 func (u *CartRepository) FetchCartByID(id int64) (domains.Cart, error) {
 	sqlStmt := `SELECT c.id, u.id, u.fullname, u.address, u.email, u.phone_number, u.verified_date, 
-	b.id, b.library_id, b.title, b.author, b.page_number, b.deposit, b.cover
+	b.id, b.title, b.author, b.page_number, b.deposit, b.cover
 	FROM carts c 
 	INNER JOIN users u ON c.user_id = u.id
 	INNER JOIN books b ON c.book_id = b.id
@@ -34,12 +34,11 @@ func (u *CartRepository) FetchCartByID(id int64) (domains.Cart, error) {
 		&cart.User.PhoneNumber,
 		&cart.User.Verified,
 		&cart.Book.ID,
-		&cart.Book.LibraryID,
 		&cart.Book.Title,
 		&cart.Book.Author,
 		&cart.Book.PageNumber,
 		&cart.Book.Deposit,
-		&cart.Book.CoverPict,
+		&cart.Book.Cover,
 	)
 
 	if err != nil {
@@ -51,7 +50,7 @@ func (u *CartRepository) FetchCartByID(id int64) (domains.Cart, error) {
 
 func (u *CartRepository) FetchCartByUserID(userID int64) ([]domains.Cart, error) {
 	sqlStmt := `SELECT c.id, u.id, u.fullname, u.address, u.email, u.phone_number, u.verified_date, 
-	b.id, b.library_id, b.title, b.author, b.page_number, b.deposit, b.cover
+	b.id, b.title, b.author, b.page_number, b.deposit, b.cover
 	FROM carts c 
 	INNER JOIN users u ON c.user_id = u.id
 	INNER JOIN books b ON c.book_id = b.id
@@ -76,12 +75,11 @@ func (u *CartRepository) FetchCartByUserID(userID int64) ([]domains.Cart, error)
 			&cart.User.PhoneNumber,
 			&cart.User.Verified,
 			&cart.Book.ID,
-			&cart.Book.LibraryID,
 			&cart.Book.Title,
 			&cart.Book.Author,
 			&cart.Book.PageNumber,
 			&cart.Book.Deposit,
-			&cart.Book.CoverPict,
+			&cart.Book.Cover,
 		)
 
 		if err != nil {
