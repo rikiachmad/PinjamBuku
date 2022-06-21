@@ -31,3 +31,7 @@ type CreateLibrary struct {
 type LibraryRepository interface {
 	Login(email string, password string) (Library, error)
 }
+
+type LibraryAuthUsecase interface {
+	Login(library Library) (Library, error)
+}
