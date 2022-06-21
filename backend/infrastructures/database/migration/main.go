@@ -134,12 +134,15 @@ func main() {
 		panic(err)
 	}
 
-	// For Testing
-	// _, err = db.Exec(`INSERT INTO book_categories (name) VALUES ("EDUCATION"), ("ROMANTIC"), ("FIKSI")`)
+	_, err = db.Exec(`
+		INSERT INTO book_categories (name) 
+		VALUES 
+		("Umum"), ("Filsafat dan Psikologi"), ("Agama"), ("Sosial"), ("Bahasa"), ("Sains dan Matematika"), ("Teknologi"), ("Seni dan Rekreasi"), ("Literatur dan Sastra"), ("Sejarah dan Geografi")
+	`)
 
-	// if err != nil {
-	// 	panic(err)
-	// }
+	if err != nil {
+		panic(err)
+	}
 	// For Testing
 	// _, err = db.Exec(`
 	// 	INSERT INTO books (title, author, description, cover, page_number, stock, deposit, category_id, library_id, is_publish)

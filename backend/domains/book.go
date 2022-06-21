@@ -36,6 +36,7 @@ type BookRepository interface {
 	GetAll() ([]Book, error)
 	GetById(id int64) (Book, error)
 	GetSearchByTitle(words string) ([]Book, error)
+	GetSort(key string) ([]Book, error)
 }
 
 type BookUsecase interface {

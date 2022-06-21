@@ -224,3 +224,61 @@ func (b *BookRepository) GetSearchByTitle(words string) ([]domains.Book, error) 
 	return books, nil
 
 }
+
+func (b *BookRepository) GetSort(key string) ([]domains.Book, error) {
+	var books []domains.Book
+
+	sqlStmt := `
+		SELECT 
+			b.id, 
+			b.title,
+			b.author,
+			b.description, 
+			b.cover,
+			b.page_number,
+			b.stock, 
+			b.deposit, 
+			bc.name as category_name, 
+			l.name as library_name
+		FROM books b 
+		INNER JOIN book_categories bc ON b.category_id = bc.id
+		INNER JOIN libraries l ON b.library_id = l.id
+		ORDER BY 
+			b.title ?;
+	`
+
+	rows, err := b.db.Query(sqlStmt, key)
+
+	if err != nil {
+		return books, err
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var book domains.Book
+
+		if err := rows.Scan(
+			&book.ID,
+			&book.Title,
+			&book.Author,
+			&book.Description,
+			&book.Cover,
+			&book.PageNumber,
+			&book.Stock,
+			&book.Deposit,
+			&book.CategoryName,
+			&book.LibraryName,
+		); err != nil {
+			return books, err
+		}
+
+		books = append(books, book)
+	}
+
+	if err != nil {
+		return books, err
+	}
+
+	return books, nil
+}
