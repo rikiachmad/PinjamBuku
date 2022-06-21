@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/rg-km/final-project-engineering-16/backend/app/middleware"
 	"github.com/rg-km/final-project-engineering-16/backend/app/routes"
 )
 
@@ -15,11 +16,12 @@ func main() {
 	router := gin.Default()
 
 	db, err := sql.Open("sqlite3", "../infrastructures/database/migration/pinjambuku.db")
-  
+
 	if err != nil {
 		panic(err)
 	}
 
+	router.Use(middleware.CORSMiddleware())
 	routes.InitRoutesAuth(db, router)
 	routes.InitRoutesBook(db, router)
 
