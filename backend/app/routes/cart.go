@@ -18,6 +18,7 @@ func InitRoutesCart(db *sql.DB, route *gin.Engine) {
 	{
 		cart := apiv1.Group("/cart")
 		{
+			cart.GET("/", cartController.ShowCartByUserID)
 			cart.POST("/", cartController.InsertToCart)
 		}
 

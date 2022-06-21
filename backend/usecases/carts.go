@@ -18,6 +18,9 @@ func NewCartUsecase(repo domains.CartRepository) CartUsecase {
 }
 
 func (c CartUsecase) ShowCartByUserID(userID int64) ([]domains.Cart, error) {
+	if userID == 0 {
+		return nil, exceptions.ErrUnauthorized
+	}
 	carts, err := c.Repo.FetchCartByUserID(userID)
 	if err != nil {
 		return nil, err

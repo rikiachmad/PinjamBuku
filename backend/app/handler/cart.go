@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -29,6 +30,33 @@ func NewCartController(cartUsecase domains.CartUsecase) CartController {
 	return CartController{
 		cartUsecase: cartUsecase,
 	}
+}
+
+func (cc CartController) ShowCartByUserID(c *gin.Context) {
+	req := Cart{}
+	if err := c.Bind(&req); err != nil {
+		presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
+		return
+	}
+	
+	fmt.Printf("userID: %d\n", req)
+	domain := req.ToCartDomain()
+	fmt.Printf("userID: %d\n", domain.UserID)
+	res, err := cc.cartUsecase.ShowCartByUserID(domain.UserID)
+	if err != nil {
+		if err == exceptions.ErrBadRequest {
+			presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
+			return
+		} else if err == exceptions.ErrUnauthorized {
+			presenter.ErrorResponse(c, http.StatusUnauthorized, exceptions.ErrUnauthorized)
+			return
+		}
+		presenter.ErrorResponse(c, http.StatusInternalServerError, exceptions.ErrInternalServerError)
+		return
+	}
+	resFromDomain := presenter.CartListFromDomain(res)
+
+	presenter.SuccessResponse(c, http.StatusOK, resFromDomain)
 }
 
 func (cc CartController) InsertToCart(c *gin.Context) {
