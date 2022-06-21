@@ -22,11 +22,11 @@ type CreateUser struct {
 	Email          string     `json:"email"`
 	Fullname       string     `json:"fullname"`
 	Address		string     `json:"address"`
-	PhoneNumber	string     `json:"phone_number"`
+	PhoneNumber	string     `json:"phoneNumber"`
 	Role		string		`json:"role"`
 	Photo		string     `json:"photo"`
-	CreatedAt	string     `json:"created_at"`
-	UpdatedAt	string     `json:"updated_at"`
+	CreatedAt	string     `json:"createdAt"`
+	UpdatedAt	string     `json:"updatedAt"`
 }
 
 func CreateUserFromDomain(u domains.User) CreateUser {
