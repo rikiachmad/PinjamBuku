@@ -4,10 +4,13 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/rg-km/final-project-engineering-16/backend/app/presenter"
+	"github.com/rg-km/final-project-engineering-16/backend/commons/exceptions"
 )
 
 //jwt service
@@ -16,8 +19,8 @@ type JWTService interface {
 	ValidateToken(token string) (*jwt.Token, error)
 }
 type authCustomClaims struct {
-	Name string `json:"name"`
-	Admin bool   `json:"admin"`
+	Name    string `json:"name"`
+	Admin   bool   `json:"admin"`
 	Library bool   `json:"library"`
 	jwt.StandardClaims
 }
@@ -77,15 +80,33 @@ func AuthorizeJWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		const BEARER_SCHEMA = "Bearer"
 		authHeader := c.GetHeader("Authorization")
+		if !strings.Contains(authHeader, BEARER_SCHEMA) {
+			presenter.ErrorResponse(c, http.StatusUnauthorized, exceptions.ErrUnauthorized)
+			c.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
 		tokenString := authHeader[len(BEARER_SCHEMA):]
 		token, err := JWTAuthService().ValidateToken(tokenString)
-		if token.Valid {
-			claims := token.Claims.(jwt.MapClaims)
-			fmt.Println(claims)
-		} else {
-			fmt.Println(err)
+		if err != nil {
+			presenter.ErrorResponse(c, http.StatusUnauthorized, exceptions.ErrUnauthorized)
 			c.AbortWithStatus(http.StatusUnauthorized)
+			return
 		}
+		if !token.Valid {
+			presenter.ErrorResponse(c, http.StatusUnauthorized, exceptions.ErrUnauthorized)
+			c.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+		claims := token.Claims.(jwt.MapClaims)
+		fmt.Println(claims)
+		if len(c.Keys) == 0 {
+			c.Keys = make(map[string]interface{})
+		}
+		c.Keys["library"] = claims["library"]
+		c.Keys["admin"] = claims["admin"]
 
+		if claims["library"] == false && claims["admin"] == false {
+			c.Keys["user"] = true
+		}
 	}
 }
