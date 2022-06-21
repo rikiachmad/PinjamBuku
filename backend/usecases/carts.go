@@ -29,7 +29,7 @@ func (c CartUsecase) InsertToCart(userID, bookID int64) (domains.Cart, error) {
 	}
 	cart, err := c.Repo.InsertToCart(userID, bookID)
 	if err != nil {
-		return cart, err
+		return domains.Cart{}, err
 	}
 	return cart, nil
 }
