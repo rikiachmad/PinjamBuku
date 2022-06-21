@@ -16,12 +16,17 @@ func InitRoutesAuth(db *sql.DB, route *gin.Engine) {
 	userUsecase := usecases.NewAuthUsecase(userRepository, tokenAuthService)
 	authController := handler.NewAuthController(userUsecase)
 
+	libraryRepository := repository.NewLibraryRepository(db)
+	libraryUsecase := usecases.NewLibraryAuthUsecase(libraryRepository, tokenAuthService)
+	libraryAuthController := handler.NewLibraryAuthController(&libraryUsecase)
+
 	apiv1 := route.Group("/api/v1")
 	{
 		auth := apiv1.Group("/auth")
 		{
 			auth.POST("/login", authController.SignIn)
 			auth.POST("/register", authController.Register)
+			auth.POST("/library/login", libraryAuthController.SingInForLibrary)
 		}
 
 	}

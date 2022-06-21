@@ -15,6 +15,7 @@ func main() {
 	router := gin.Default()
 
 	db, err := sql.Open("sqlite3", "../infrastructures/database/migration/pinjambuku.db")
+  
 	if err != nil {
 		panic(err)
 	}
