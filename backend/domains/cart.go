@@ -18,4 +18,5 @@ type CartRepository interface {
 
 type CartUsecase interface {
 	ShowCartByUserID(id int64) ([]Cart, error)
+	InsertToCart(userID, bookID int64) (Cart, error)
 }
