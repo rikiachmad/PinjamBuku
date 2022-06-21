@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rg-km/final-project-engineering-16/backend/app/presenter"
@@ -72,11 +73,40 @@ func (cc CartController) InsertToCart(c *gin.Context) {
 		if err == exceptions.ErrBadRequest {
 			presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
 			return
+		} else if err == exceptions.ErrUnauthorized {
+			presenter.ErrorResponse(c, http.StatusUnauthorized, exceptions.ErrUnauthorized)
+			return
+		} else if err == exceptions.ErrCartAlreadyExists {
+			presenter.ErrorResponse(c, http.StatusConflict, exceptions.ErrCartAlreadyExists)
+			return
 		}
 		presenter.ErrorResponse(c, http.StatusInternalServerError, exceptions.ErrInternalServerError)
 		return
 	}
 	resFromDomain := presenter.InsertCartFromDomain(res)
 
-	presenter.SuccessResponse(c, http.StatusOK, resFromDomain)
+	presenter.SuccessResponse(c, http.StatusCreated, resFromDomain)
+}
+
+func (cc CartController) DeleteCartByID(c *gin.Context) {
+	id := c.Param("id")
+	if id == "" {
+		presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
+		return
+	}
+	intID, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
+		return
+	}
+	err = cc.cartUsecase.DeleteCartByID(intID)
+	if err != nil {
+		if err == exceptions.ErrBadRequest {
+			presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
+			return
+		}
+		presenter.ErrorResponse(c, http.StatusInternalServerError, exceptions.ErrInternalServerError)
+		return
+	}
+	presenter.SuccessResponse(c, http.StatusOK, nil)
 }

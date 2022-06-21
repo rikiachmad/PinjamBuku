@@ -61,6 +61,9 @@ func (u *UserRepository) Login(email string, password string) (domains.User, err
 	)
 
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return domains.User{}, exceptions.ErrInvalidCredentials
+		}
 		return domains.User{}, err
 	}
 

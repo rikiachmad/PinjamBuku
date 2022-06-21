@@ -20,6 +20,7 @@ func InitRoutesCart(db *sql.DB, route *gin.Engine) {
 		{
 			cart.GET("/", cartController.ShowCartByUserID)
 			cart.POST("/", cartController.InsertToCart)
+			cart.DELETE("/:id", cartController.DeleteCartByID)
 		}
 
 	}
