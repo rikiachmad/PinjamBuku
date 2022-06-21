@@ -24,6 +24,7 @@ func main() {
 	router.Use(middleware.CORSMiddleware())
 	routes.InitRoutesAuth(db, router)
 	routes.InitRoutesBook(db, router)
+	routes.InitRoutesCart(db, router)
 
 	err = router.Run(":" + "8080")
 	if err != nil {
