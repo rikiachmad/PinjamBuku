@@ -30,6 +30,5 @@ func InitRoutesBook(db *sql.DB, route *gin.Engine) {
 		{
 			auth.GET("/search", bookController.GetSearchBook)
 		}
-
 	}
 }
