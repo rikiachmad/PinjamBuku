@@ -13,4 +13,6 @@ var (
 	ErrBadRequest = errors.New("invalid request message")
 	// ErrUserAlreadyExists is thrown when the user already exists
 	ErrUserAlreadyExists = errors.New("user already exists")
+	// ErrUnauthorized is thrown when user is unauthorized
+	ErrUnauthorized = errors.New("unauthorized")
 )

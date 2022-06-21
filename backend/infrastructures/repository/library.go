@@ -3,7 +3,8 @@ package repository
 import (
 	"database/sql"
 
-	"github.com/rg-km/final-project-engineering-16/backend/commons/exceptions"
+	exceptions "github.com/rg-km/final-project-engineering-16/backend/commons/exceptions"
+	helpers "github.com/rg-km/final-project-engineering-16/backend/commons/helpers"
 	"github.com/rg-km/final-project-engineering-16/backend/domains"
 )
 
@@ -16,7 +17,7 @@ func NewLibraryRepository(db *sql.DB) domains.LibraryRepository {
 }
 
 func (l *LibraryRepository) Login(email string, password string) (domains.Library, error) {
-	sqlstmt := `SELECT name, email, password FROM libaries WHERE email = ?`
+	sqlstmt := `SELECT name, email, password FROM libraries WHERE email = ?`
 
 	library := domains.Library{}
 
@@ -31,11 +32,13 @@ func (l *LibraryRepository) Login(email string, password string) (domains.Librar
 		return domains.Library{}, err
 	}
 
-	// for temporary password in db will not be encrypted
-	// to make it easy for testing purpose because the library is generated manually by the admin.
-	if library.Password != password {
+	if !helpers.IsMatched(library.Password, password) {
 		return domains.Library{}, exceptions.ErrInvalidCredentials
 	}
+
+	// if library.Password != password {
+	// 	return domains.Library{}, exceptions.ErrInvalidCredentials
+	// }
 
 	// empty the password in sake of security
 	library.Password = ""
