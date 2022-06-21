@@ -13,10 +13,14 @@ type Cart struct {
 type CartRepository interface {
 	FetchCartByID(id int64) (Cart, error)
 	FetchCartByUserID(userID int64) ([]Cart, error)
+	CheckCartByUserIDAndBookID(userID int64, bookID int64) (Cart, error)
 	InsertToCart(userID, bookID int64) (Cart, error)
+	DeleteCartByID(id int64) error
+	DeleteCartByUserID(userID int64) error
 }
 
 type CartUsecase interface {
 	ShowCartByUserID(id int64) ([]Cart, error)
 	InsertToCart(userID, bookID int64) (Cart, error)
+	DeleteCartByID(id int64) error
 }
