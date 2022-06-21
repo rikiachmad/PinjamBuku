@@ -12,7 +12,7 @@ type BasicResponse struct {
 }
 
 func SuccessResponse(c *gin.Context, status int, data interface{}) {
-	res := BasicResponse {
+	res := BasicResponse{
 		Status:  status,
 		Success: true,
 		Message: "success",
@@ -22,7 +22,7 @@ func SuccessResponse(c *gin.Context, status int, data interface{}) {
 }
 
 func ErrorResponse(c *gin.Context, status int, err error) {
-	res := BasicResponse {
+	res := BasicResponse{
 		Status:  status,
 		Success: false,
 		Message: err.Error(),
