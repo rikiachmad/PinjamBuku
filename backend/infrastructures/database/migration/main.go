@@ -145,31 +145,6 @@ func main() {
 	}
 
 	_, err = db.Exec(`
-		CREATE TABLE IF NOT EXISTS books (
-			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-			title VARCHAR(255) NOT NULL,
-			author VARCHAR(255) NOT NULL,
-			description TEXT NOT NULL,
-			cover BLOB NOT NULL,
-			page_number INTEGER NOT NULL,
-			stock INTEGER NOT NULL,
-			deposit INTEGER NOT NULL,
-			category_id INTEGER NOT NULL,
-			library_id INTEGER NOT NULL,
-			is_publish BOOLEAN NOT NULL,
-			created_at DATETIME,
-			updated_at DATETIME,
-			deleted_at DATETIME,
-		FOREIGN KEY (category_id) REFERENCES book_categories(id)
-		FOREIGN KEY (library_id) REFERENCES libraries(id)
-		)
-	`)
-
-	if err != nil {
-		panic(err)
-	}
-
-	_, err = db.Exec(`
 		CREATE TABLE IF NOT EXISTS book_categories (
 			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			name VARCHAR(255) NOT NULL
@@ -184,6 +159,37 @@ func main() {
 		INSERT INTO book_categories (name) 
 		VALUES 
 		("Umum"), ("Filsafat dan Psikologi"), ("Agama"), ("Sosial"), ("Bahasa"), ("Sains dan Matematika"), ("Teknologi"), ("Seni dan Rekreasi"), ("Literatur dan Sastra"), ("Sejarah dan Geografi")
+	`)
+
+	if err != nil {
+		panic(err)
+	}
+
+	//for testing
+	_, err = db.Exec(`
+	INSERT INTO bank_accounts VALUES(1, "PERPUS SBY", "144410101", "MANDIRI"), (2, "PERPUS SDA", "1444101012", "BCA")
+	`)
+
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = db.Exec(`
+	INSERT INTO libraries VALUES (1, "Perpus SBY", "perpussby@gmail.com", "123", "Surabaya", "123123", "sby.jpg", 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+								 (2, "Perpus SDA", "perpussda@gmail.com", "123", "Sidoarjo", "123123", "sda.jpg", 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+	`)
+
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = db.Exec(`
+	INSERT INTO books (id,katalog_id,library_id,category_id,title,author,page_number,stock,description,deposit,cover,created_at,updated_at) VALUES 
+	('1', 'AB001', '1', '1', 'Ayat-Ayat Cinta', 'Habiburrahman', '241', '10', 'ini deskripsi ayat ayat cinta', '30000', 'ayat.jpg',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP),
+	('2', 'AB002', '2', '2', 'Laskar Pelangi', 'Budi', '150', '30', 'ini deksripsi laskar', '45000', 'laskar.jpg',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP),
+	('3', 'AB003', '1', '1', 'Heartbreak Motel', 'Wawan', '250', '40', 'ini deskripsi heartbreak', '120000', 'heart.jpg',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP),
+	('4', 'AB004', '2', '2', 'Sagaras', 'Tere Liye', '285', '89', 'ini deskripsi sagaras', '150000', 'sagaras.jpg',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP),
+	('5', 'AB005', '1', '1', 'Nebula', 'Wati', '201', '30', 'ini deskripsi nebula', '98000', 'nebula.jpg',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)
 	`)
 
 	if err != nil {
