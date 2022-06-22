@@ -16,6 +16,14 @@ type Library struct {
 	UpdatedAt     string `db:"updated_at"`
 }
 
+type UpdateLibrary struct {
+	ID          int64  `db:"id"`
+	Name        string `db:"name"`
+	Address     string `db:"address"`
+	PhoneNumber string `db:"phone_number"`
+	Photo       string `db:"picture_profile"`
+}
+
 type CreateLibrary struct {
 	Name          string `db:"name"`
 	Email         string `db:"email"`
@@ -30,8 +38,17 @@ type CreateLibrary struct {
 
 type LibraryRepository interface {
 	Login(email string, password string) (Library, error)
+	GetAllLibrary() ([]Library, error)
+	GetLibraryByID(id int64) (Library, error)
+	UpdateLibraryProfileByID(id int64, name, address, phoneNumber, photo string) (UpdateLibrary, error)
 }
 
 type LibraryAuthUsecase interface {
 	Login(library Library) (Library, error)
+}
+
+type LibraryUsecase interface {
+	GetAllLibrary() ([]Library, error)
+	GetLibraryByID(id int64) (Library, error)
+	UpdateLibraryProfileByID(library UpdateLibrary, id int64) (UpdateLibrary, error)
 }
