@@ -15,14 +15,14 @@ func NewBookRepository(db *sql.DB) domains.BookRepository {
 	return &BookRepository{db: db}
 }
 
-func (b *BookRepository) Add(title, author, description, cover string, pageNumber, stock, deposit, categoryId, libraryId int64) (domains.Book, error) {
+func (b *BookRepository) Add(katalogId, title, author, description, cover string, pageNumber, stock, deposit, categoryId, libraryId int64) (domains.Book, error) {
 	var book domains.Book
 	sqlStmt := `
-		INSERT INTO books(title, author, description, cover, page_number, stock, deposit, category_id, library_id, is_publish, created_at, updated_at)
-		VALUES (?, ?, ?, ?, ?, ?, ? ,? ,? ,?, ?, ?)
+		INSERT INTO books(katalog_id, title, author, description, cover, page_number, stock, deposit, category_id, library_id, is_publish, created_at, updated_at)
+		VALUES (?, ?, ?, ?, ?, ?, ? ,? ,? ,?, ?, ?, ?)
 	`
 
-	_, err := b.db.Exec(sqlStmt, title, author, description, cover, pageNumber, stock, deposit, categoryId, libraryId, true, time.Now(), time.Now())
+	_, err := b.db.Exec(sqlStmt, katalogId, title, author, description, cover, pageNumber, stock, deposit, categoryId, libraryId, true, time.Now(), time.Now())
 
 	if err != nil {
 		return domains.Book{}, err

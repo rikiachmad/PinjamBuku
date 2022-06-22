@@ -123,12 +123,8 @@ func (b BookController) InsertBook(c *gin.Context) {
 	_, err := b.bookUsecase.Insert(domain)
 
 	if err != nil {
-		if errors.Is(err, exceptions.ErrBadRequest) {
-			presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
-			return
-		} else {
-			presenter.ErrorResponse(c, http.StatusInternalServerError, exceptions.ErrInternalServerError)
-		}
+		presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
+		return
 	}
 
 	presenter.SuccessResponse(c, http.StatusCreated, nil)

@@ -2,6 +2,7 @@ package domains
 
 type Book struct {
 	ID             int64  `db:"id"`
+	KatalogId      string `db:"katalog_id"`
 	Title          string `db:"title"`
 	Author         string `db:"author"`
 	Description    string `db:"description"`
@@ -18,6 +19,7 @@ type Book struct {
 }
 
 type CreateBook struct {
+	KatalogId   string `db:"katalog_id"`
 	Title       string `db:"title"`
 	Author      string `db:"author"`
 	Description string `db:"description"`
@@ -31,7 +33,7 @@ type CreateBook struct {
 }
 
 type BookRepository interface {
-	Add(title, author, description, cover string, pageNumber, stock, deposit, categoryId, libraryId int64) (Book, error)
+	Add(katalogId, title, author, description, cover string, pageNumber, stock, deposit, categoryId, libraryId int64) (Book, error)
 	// Update(title, author, description, cover string, pageNumber, stock, deposit, categoryId, id int64) (Book, error)
 	GetAll() ([]Book, error)
 	GetById(id int64) (Book, error)

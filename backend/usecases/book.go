@@ -41,7 +41,7 @@ func (b BookUsecase) FetchAll() ([]domains.Book, error) {
 }
 
 func (b BookUsecase) Insert(book domains.CreateBook) (domains.Book, error) {
-	books, err := b.Repo.Add(book.Title, book.Author, book.Description, book.Cover, book.PageNumber, book.Stock, book.Deposit, book.CategoryId, book.LibraryId)
+	books, err := b.Repo.Add(book.KatalogId, book.Title, book.Author, book.Description, book.Cover, book.PageNumber, book.Stock, book.Deposit, book.CategoryId, book.LibraryId)
 
 	if err != nil {
 		log.Printf("error usecases-book Insert %s", err)
