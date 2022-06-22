@@ -15,7 +15,7 @@ func main() {
 	_ = godotenv.Load()
 	router := gin.Default()
 
-	db, err := sql.Open("sqlite3", "../infrastructures/database/migration/pinjambuku.db")
+	db, err := sql.Open("sqlite3", "backend/infrastructures/database/migration/pinjambuku.db")
 
 	if err != nil {
 		panic(err)
@@ -24,6 +24,7 @@ func main() {
 	router.Use(middleware.CORSMiddleware())
 	routes.InitRoutesAuth(db, router)
 	routes.InitRoutesBook(db, router)
+	routes.InitRoutesCart(db, router)
 	routes.InitRoutesLibrary(db, router)
 
 	err = router.Run(":" + "8080")
