@@ -1,18 +1,19 @@
 import React from 'react'
-import { Routes , Route } from 'react-router-dom'
-import Login from './components/Login'
-import SignUp from './components/Signup'
-import Dashboard from './components/Dashboard'
+import { Routes, Route, Link } from "react-router-dom";
+import Register from "./account/Register";
+import Home from './user/Home';
+import Login from './account/Login'
 
 function App() {
   return (
     <div className="App">
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/Signup" element={<SignUp />} />
-        <Route path="/Dashboard" element={<Dashboard />} />
+      <Routes>        
+        <Route index element={<Home />} />
+        <Route path="daftar" element={<Register />} />
+        <Route path='masuk' element={<Login />} />
       </Routes>
     </div>
-  )
+  );
 }
-export default App
+
+export default App;
