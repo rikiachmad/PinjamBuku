@@ -19,7 +19,7 @@ export default function Register() {
     }
     const popupAlert = () => {
         Swal.fire("Berhasil!", "Akun Anda telah terdaftar.", "success");
-        navigate("/masuk")
+        navigate("/login")
     }
     const renderButton = () => {
         if (formRegist > 1) {
@@ -66,7 +66,7 @@ export default function Register() {
                                             {formRegist >= 0 && (
                                                 <section style={{ display: formRegist === 0 ? "block" : "none" }}>
                                                     <h1>Daftar Sekarang</h1><br />
-                                                    <p>Sudah punya akun PinjamBuku? <a href="/masuk" class="login">Masuk</a></p> <br />
+                                                    <p>Sudah punya akun PinjamBuku? <a href="/login" class="login">Masuk</a></p> <br />
                                                     <Form.Group className="mb-3" controlId="formBasicEmail">
                                                         <Form.Label>Email</Form.Label>
                                                         <Form.Control type="email" name="email" {...register("email", { required: { value: true } })} />
