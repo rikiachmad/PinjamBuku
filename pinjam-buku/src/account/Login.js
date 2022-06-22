@@ -4,15 +4,14 @@ import axios from 'axios'
 import Header from '../components/Header'
 
 function Login (props) {
-  const [user, setUser] = useState({email: "", password:""})
-  const apiUrl = "/https://api-dev.pinjambuku.me/api/v1/auth/login"
-  const Logins = (e) => {
-    e.preventDefault();    
-            debugger;   
+    const navigate = useNavigate()
+    const [user, setUser] = useState({email: "", password:""})
+    const apiUrl = "https://api-dev.pinjambuku.me/api/v1/auth/login/"
+    const Logins = (e) => {
+    e.preventDefault();      
             const data = { email: user.email, password: user.password };    
             axios.post(apiUrl, data)    
-            .then((result) => {    
-                debugger;  
+            .then((result) => {     
                 console.log(result.data);   
                 const serializedState = JSON.stringify(result.data.UserDetails);  
                var a= localStorage.setItem('myData', serializedState);   
@@ -20,45 +19,16 @@ function Login (props) {
                 const user =result.data.UserDetails;  
                 console.log(result.data.message);  
                 if (result.data.status == '200')    
-                    props.history.push('/Dashboard')    
+                    navigate("/daftar")   
                 else    
                 alert('Invalid User');    
             })         
   }
 
   const onChange = (e) => {
-    e.persist();    
-    debugger;    
+    e.persist();       
     setUser({...user, [e.target.name]: e.target.value});
   }
-  // const[email, setEmail] = useState("");
-  // const[password, setPassword] = useState("");
-  // const[redirect, setRedirect] = useState(false);
-  // const[error, setError] = useState("");
-
-  // const onChangeEmail = (e) => {
-  //   const value = e.target.value;
-  //   setEmail(value);
-  // }
-
-  // const onChangePassword = (e) => {
-  //   const value = e.target.value;
-  //   setPassword(value);
-  // }
-
-  // const SubmitLogin = async (e) => {
-  //   const navigate = useNavigate()
-  //   const data = {
-  //     email: email,
-  //     password: password
-  //   }
-   
-  //     const response = await axios.post('https://api-dev.pinjambuku.me/api/auth/login', data)
-  //     console.log(response);
-  //     if (response){
-  //       navigate("/daftar")
-  //     }}
-  
 
   return (
     <Fragment>
