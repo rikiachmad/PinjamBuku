@@ -87,17 +87,6 @@ func main() {
 		panic(err)
 	}
 
-	// i create for dummy data
-	_, err = db.Exec(`
-		INSERT INTO libraries (name, email, password, address, phone_number, picture_profile, account_id)
-		VALUES("PERPUS KAB. TANGERANG", "perpuskabtang@gmail.com", "123", "Tangerang", "0210324234", "perpuskabtang.jpg", 1),
-		("PERPUS KAB. BANDUNG", "perpuskabbandungng@gmail.com", "123", "Bandung", "0210324234", "perpuskabbandung.jpg", 1)
-	`)
-
-	if err != nil {
-		panic(err)
-	}
-
 	_, err = db.Exec(`
 		CREATE TABLE IF NOT EXISTS books (
 			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -143,16 +132,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	// For Testing
-	// _, err = db.Exec(`
-	// 	INSERT INTO books (title, author, description, cover, page_number, stock, deposit, category_id, library_id, is_publish)
-	// 	VALUES ("Berdamai dengan Emosi", "Asti Musman", "Ragam Emosi, Gangguan Emosi, Emosi dan Ekspresi Wajah", "berdamai.jpg", 120, 40, 30000, 1, 1, true ),
-	// 	("Paket komplit having fun 7in one", "Tim Penerbit", "Paket buku ini disusun agar kita sebagai orang tua.", "7in.jpg", 190, 2, 70000, 2, 2, true )
-	// `)
 
-	// if err != nil {
-	// 	panic(err)
-	// }
 }
 
 func Rollback(db *sql.DB) {

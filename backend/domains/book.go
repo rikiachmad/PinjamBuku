@@ -44,4 +44,5 @@ type BookUsecase interface {
 	FetchAll() ([]Book, error)
 	FetchById(book Book) (Book, error)
 	FetchSearchBook(by, words string) ([]Book, error)
+	FetchSort(key string) ([]Book, error)
 }

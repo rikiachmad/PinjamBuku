@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"log"
+	"strings"
 
 	"github.com/rg-km/final-project-engineering-16/backend/commons/exceptions"
 	"github.com/rg-km/final-project-engineering-16/backend/domains"
@@ -61,4 +62,20 @@ func (b BookUsecase) FetchSearchBook(by, words string) ([]domains.Book, error) {
 
 	return books, nil
 
+}
+
+func (b BookUsecase) FetchSort(key string) ([]domains.Book, error) {
+
+	if strings.EqualFold("asc", key) || strings.EqualFold("desc", key) {
+		books, err := b.Repo.GetSort(key)
+
+		if err != nil {
+			log.Printf("error usecases-book FetchSearchBook %s", err)
+			return []domains.Book{}, err
+		}
+
+		return books, nil
+	}
+
+	return []domains.Book{}, exceptions.ErrBadRequest
 }

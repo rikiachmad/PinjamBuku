@@ -243,11 +243,9 @@ func (b *BookRepository) GetSort(key string) ([]domains.Book, error) {
 		FROM books b 
 		INNER JOIN book_categories bc ON b.category_id = bc.id
 		INNER JOIN libraries l ON b.library_id = l.id
-		ORDER BY 
-			b.title ?;
-	`
-
-	rows, err := b.db.Query(sqlStmt, key)
+		ORDER BY b.title
+	` + key
+	rows, err := b.db.Query(sqlStmt)
 
 	if err != nil {
 		return books, err
