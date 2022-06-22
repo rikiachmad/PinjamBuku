@@ -26,7 +26,7 @@ func (a *LibraryAuthUsecase) Login(library domains.Library) (domains.Library, er
 	if err != nil {
 		return domains.Library{}, err
 	}
-	library.Token = a.TokenAuth.GenerateToken(library.Email, false, true)
+	library.Token = a.TokenAuth.GenerateToken(library.ID, library.Email, false, true)
 
 	return library, nil
 }

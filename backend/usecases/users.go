@@ -24,9 +24,9 @@ func (a AuthUsecase) Login(user domains.User) (domains.User, error) {
 		return user, err
 	}
 	if user.Role == "admin" {
-		user.Token = a.TokenAuth.GenerateToken(user.Email, true, false)
+		user.Token = a.TokenAuth.GenerateToken(user.ID, user.Email, true, false)
 	} else {
-		user.Token = a.TokenAuth.GenerateToken(user.Email, false, false)
+		user.Token = a.TokenAuth.GenerateToken(user.ID, user.Email, false, false)
 	}
 	return user, nil
 }

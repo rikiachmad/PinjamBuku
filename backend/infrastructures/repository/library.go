@@ -16,12 +16,13 @@ func NewLibraryRepository(db *sql.DB) domains.LibraryRepository {
 }
 
 func (l *LibraryRepository) Login(email string, password string) (domains.Library, error) {
-	sqlstmt := `SELECT name, email, password FROM libraries WHERE email = ?`
+	sqlstmt := `SELECT id, name, email, password FROM libraries WHERE email = ?`
 
 	library := domains.Library{}
 
 	row := l.db.QueryRow(sqlstmt, email)
 	err := row.Scan(
+		&library.ID,
 		&library.Name,
 		&library.Email,
 		&library.Password,

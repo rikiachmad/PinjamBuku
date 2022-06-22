@@ -49,12 +49,13 @@ func (u *UserRepository) FetchUserByID(id int64) (domains.User, error) {
 }
 
 func (u *UserRepository) Login(email string, password string) (domains.User, error) {
-	sqlStmt := `SELECT fullname, email, password FROM users WHERE email = ?`
+	sqlStmt := `SELECT id, fullname, email, password FROM users WHERE email = ?`
 
 	user := domains.User{}
 
 	row := u.db.QueryRow(sqlStmt, email, password)
 	err := row.Scan(
+		&user.ID,
 		&user.Fullname,
 		&user.Email,
 		&user.Password,

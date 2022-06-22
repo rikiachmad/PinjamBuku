@@ -15,11 +15,12 @@ import (
 
 //jwt service
 type JWTService interface {
-	GenerateToken(email string, isAdmin bool, isLibrary bool) string
+	GenerateToken(id int64, email string, isAdmin bool, isLibrary bool) string
 	ValidateToken(token string) (*jwt.Token, error)
 }
 type authCustomClaims struct {
-	Name    string `json:"name"`
+	ID    	int64  `json:"id"`
+	Email   string `json:"email"`
 	Admin   bool   `json:"admin"`
 	Library bool   `json:"library"`
 	jwt.StandardClaims
@@ -45,8 +46,9 @@ func getSecretKey() string {
 	return secret
 }
 
-func (service *JwtServices) GenerateToken(email string, isAdmin bool, isLibrary bool) string {
+func (service *JwtServices) GenerateToken(id int64, email string, isAdmin bool, isLibrary bool) string {
 	claims := &authCustomClaims{
+		id,
 		email,
 		isAdmin,
 		isLibrary,
