@@ -7,14 +7,24 @@ import (
 )
 
 type AuthUsecase struct {
-	Repo domains.UserRepository
+	Repo      domains.UserRepository
 	TokenAuth middleware.JWTService
+}
+
+type UserUsecase struct {
+	Repo domains.UserRepository
 }
 
 func NewAuthUsecase(repo domains.UserRepository, tokenAuth middleware.JWTService) AuthUsecase {
 	return AuthUsecase{
-		Repo: repo,
+		Repo:      repo,
 		TokenAuth: tokenAuth,
+	}
+}
+
+func NewUserUsecase(repo domains.UserRepository) UserUsecase {
+	return UserUsecase{
+		Repo: repo,
 	}
 }
 
@@ -42,4 +52,19 @@ func (a AuthUsecase) Register(user domains.CreateUser) (domains.User, error) {
 		return createdUser, err
 	}
 	return createdUser, nil
+}
+
+func (u *UserUsecase) UpdateUserProfile(user domains.UpdateUser, id int64) (domains.UpdateUser, error) {
+	_, err := u.Repo.FetchUserByID(id)
+	if err != nil {
+		return domains.UpdateUser{}, exceptions.ErrUserNotFound
+	}
+
+	userReturn, err := u.Repo.UpdateUserProfile(id, user.Fullname, user.Address, user.PhoneNumber, user.Photo)
+
+	if err != nil {
+		return domains.UpdateUser{}, err
+	}
+
+	return userReturn, nil
 }

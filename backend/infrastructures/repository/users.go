@@ -121,3 +121,26 @@ func (u *UserRepository) CheckAccountEmail(email string) bool {
 	}
 	return res == email
 }
+
+func (u *UserRepository) UpdateUserProfile(id int64, fullname, address, phoneNumber, photo string) (domains.UpdateUser, error) {
+	sqlstmt := `UPDATE users
+					SET fullname = ?,
+						address = ?,
+						phone_number = ?,
+						picture_profile = ?
+					WHERE id = ?`
+	_, err := u.db.Exec(sqlstmt, fullname, address, phoneNumber, photo, id)
+
+	if err != nil {
+		return domains.UpdateUser{}, err
+	}
+
+	user := domains.UpdateUser{}
+	user.ID = id
+	user.Fullname = fullname
+	user.Address = address
+	user.PhoneNumber = phoneNumber
+	user.Photo = photo
+
+	return user, nil
+}
