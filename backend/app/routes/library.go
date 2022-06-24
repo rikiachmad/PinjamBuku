@@ -27,7 +27,7 @@ func InitRoutesLibrary(db *sql.DB, route *gin.Engine) {
 			lib.GET("/:id", libraryController.GetLibraryByID)
 		}
 		{
-			lib.PUT("/:id", libraryController.UpdateLibraryProfileByID)
+			lib.PUT("/:id", middleware.ValidateIDMiddleware(), libraryController.UpdateLibraryProfileByID)
 		}
 	}
 

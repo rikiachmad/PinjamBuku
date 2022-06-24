@@ -19,7 +19,7 @@ type JWTService interface {
 	ValidateToken(token string) (*jwt.Token, error)
 }
 type authCustomClaims struct {
-	ID    	int64  `json:"id"`
+	ID      int64  `json:"id"`
 	Email   string `json:"email"`
 	Admin   bool   `json:"admin"`
 	Library bool   `json:"library"`
@@ -106,6 +106,7 @@ func AuthorizeJWT() gin.HandlerFunc {
 		}
 		c.Keys["library"] = claims["library"]
 		c.Keys["admin"] = claims["admin"]
+		c.Keys["id"] = claims["id"]
 
 		if claims["library"] == false && claims["admin"] == false {
 			c.Keys["user"] = true

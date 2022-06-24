@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -31,6 +32,35 @@ func AuthMiddleware(validRoles ...string) gin.HandlerFunc {
 			return
 		}
 
+	}
+}
+
+func ValidateIDMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if len(c.Keys) == 0 {
+			presenter.ErrorResponse(c, http.StatusUnauthorized, exceptions.ErrUnauthorized)
+			c.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+
+		id := c.Keys["id"]
+
+		reqId := c.Param("id")
+
+		reqIdInt, err := strconv.Atoi(reqId)
+		if err != nil {
+			presenter.ErrorResponse(c, http.StatusInternalServerError, exceptions.ErrInternalServerError)
+			c.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+
+		reqIdFloat := float64(reqIdInt)
+
+		if id != reqIdFloat {
+			presenter.ErrorResponse(c, http.StatusUnauthorized, exceptions.ErrUnauthorized)
+			c.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
 	}
 }
 
