@@ -22,15 +22,21 @@ type Borrowing struct {
 	DeletedAt     string          `db:"deleted_at"`
 }
 
+type BorrowingWithBook struct {
+	Borrowing Borrowing `json:"borrowing"`
+	Books     []Book    `json:"books"`
+}
+
 type BorrowingRepository interface {
 	FetchBorrowingByID(id int64) (Borrowing, error)
 	FetchBorrowingByUserID(userID int64) ([]Borrowing, error)
-	InsertToBorrowing(userID int64, bookID []int64, totalDeposit int64, totalCost int64) error
+	FetchBookListByBorrowingID(borrowingID int64) ([]Book, error)
+	InsertToBorrowing(userID int64, bookID []int64, totalDeposit int64, totalCost int64) (Borrowing, error)
 	DeleteBorrowingByID(id int64) error
 }
 
 type BorrowingUsecase interface {
 	ShowBorrowingByUserID(id int64) ([]Borrowing, error)
-	InsertToBorrowing(userID, bookID int64) (Borrowing, error)
+	InsertToBorrowing(userID int64, bookIDs []int64, totalCost int64) (BorrowingWithBook, error)
 	DeleteBorrowingByID(id int64) error
 }
