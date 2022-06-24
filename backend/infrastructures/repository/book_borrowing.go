@@ -42,6 +42,48 @@ func (u *BorrowingRepository) FetchBorrowingByID(id int64) (domains.Borrowing, e
 	return borrowing, nil
 }
 
+func (u *BorrowingRepository) FetchBookListByBorrowingID(borrowingID int64) ([]domains.Book, error) {
+	sqlStmt := `SELECT 
+		b.id, b.title, b.author, b.description, b.cover, b.page_number, b.stock, b.deposit,
+		l.name, l.address
+	FROM book_borrowing_list bbl
+	INNER JOIN books b ON bbl.book_id = b.id
+	INNER JOIN libraries l ON b.library_id = l.id
+	WHERE borrowing_id = ?`
+
+	book_borrowing := []domains.Book{}
+
+	rows, err := u.db.Query(sqlStmt, borrowingID)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		book := domains.Book{}
+
+		err := rows.Scan(
+			&book.ID,
+			&book.Title,
+			&book.Author,
+			&book.Description,
+			&book.Cover,
+			&book.PageNumber,
+			&book.Stock,
+			&book.Deposit,
+			&book.LibraryName,
+			&book.LibraryAddress,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		book_borrowing = append(book_borrowing, book)
+	}
+
+	return book_borrowing, nil
+}
+
 func (u *BorrowingRepository) FetchBorrowingByUserID(userID int64) ([]domains.Borrowing, error) {
 	sqlStmt := `SELECT 
 		bb.id, bb.user_id, bb.status_id, bb.total_cost, bb.borrowing_date, bb.due_date, bb.finish_date, 
@@ -93,14 +135,29 @@ func (u *BorrowingRepository) FetchBorrowingByUserID(userID int64) ([]domains.Bo
 	return book_borrowing, nil
 }
 
-func (u *BorrowingRepository) InsertToBorrowing(userID int64, bookID []int64, totalDeposit int64, totalCost int64) (error) {
-	sqlStmt := `INSERT INTO book_borrowing 
+func (u *BorrowingRepository) InsertToBorrowing(userID int64, bookID []int64, totalDeposit int64, totalCost int64) (domains.Borrowing, error) {
+	sqlStmt := `INSERT INTO book_borrowing
 	(user_id, status_id, total_deposit, total_cost, borrowing_date, due_date, finish_date, created_at, deleted_at)
-	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+	RETURNING id, user_id, status_id, total_deposit, total_cost, borrowing_date, due_date, finish_date, created_at, deleted_at`
 
-	_, err := u.db.Exec(sqlStmt, userID, 1, totalDeposit, totalCost, time.Now(), time.Now().AddDate(0, 0, 7), time.Time{}, time.Now(), time.Time{})
+	borrowing := domains.Borrowing{}
+
+	err := u.db.QueryRow(sqlStmt, userID, 1, totalDeposit, totalCost, time.Now(), time.Now().AddDate(0, 0, 21), time.Time{}, time.Now(), time.Time{}).Scan(
+		&borrowing.ID,
+		&borrowing.UserID,
+		&borrowing.StatusID,
+		&borrowing.TotalDeposit,
+		&borrowing.TotalCost,
+		&borrowing.BorrowingDate,
+		&borrowing.DueDate,
+		&borrowing.FinishDate,
+		&borrowing.CreatedAt,
+		&borrowing.DeletedAt,
+	)
+
 	if err != nil {
-		return err
+		return domains.Borrowing{}, err
 	}
 
 	sqlStmt = `INSERT INTO book_borrowing_list
@@ -110,11 +167,11 @@ func (u *BorrowingRepository) InsertToBorrowing(userID int64, bookID []int64, to
 	for _, bookID := range bookID {
 		_, err := u.db.Exec(sqlStmt, userID, bookID)
 		if err != nil {
-			return err	
+			return domains.Borrowing{}, err
 		}
 	}
 	
-	return nil
+	return borrowing, nil
 }
 
 func (u *BorrowingRepository) DeleteBorrowingByID(id int64) error {
