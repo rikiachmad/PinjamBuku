@@ -23,7 +23,7 @@ func (u *CartRepository) FetchCartByID(id int64) (domains.Cart, error) {
 	INNER JOIN books b ON c.book_id = b.id
 	INNER JOIN libraries l ON b.library_id = l.id
 	INNER JOIN book_categories bc ON b.category_id = bc.id
-	WHERE c.user_id = ?`
+	WHERE c.id = ?`
 
 	cart := domains.Cart{}
 
