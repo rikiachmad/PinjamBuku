@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -112,13 +113,15 @@ func (b BookController) GetAllBook(c *gin.Context) {
 
 func (b BookController) InsertBook(c *gin.Context) {
 	req := insertBook{}
-
+	
+	fmt.Printf("%+v\n", req)
 	if err := c.ShouldBindJSON(&req); err != nil {
 		presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
 		return
 	}
 
 	domain := req.ToInsertBookDomain()
+	fmt.Printf("%+v\n", domain)
 
 	_, err := b.bookUsecase.Insert(domain)
 
