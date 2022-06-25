@@ -20,13 +20,12 @@ func InsertCartFromDomain(c domains.Cart) InsertCart {
 
 type Cart struct {
 	ID		  int64  	 `json:"id"`
-	BookID 	  int64 	 `json:"bookId"`
-	UserID 	  int64 	 `json:"userId"`
+	BookID 	  int64 	 `json:"bookId,omitempty"`
+	UserID 	  int64 	 `json:"userId,omitempty"`
 	User 	  CreateUser `json:"user"`
 	Book 	  Book 		 `json:"book"`
-	Photo	  string     `json:"photo"`
-	CreatedAt string     `json:"createdAt"`
-	DeletedAt string     `json:"deletedAt"`
+	CreatedAt string     `json:"createdAt,omitempty"`
+	DeletedAt string     `json:"deletedAt,omitempty"`
 }
 
 func CartFromDomain(u domains.Cart) Cart {
