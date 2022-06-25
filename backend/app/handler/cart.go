@@ -122,6 +122,12 @@ func (cc CartController) DeleteCartByID(c *gin.Context) {
 		if err == exceptions.ErrBadRequest {
 			presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
 			return
+		} else if err == exceptions.ErrUnauthorized {
+			presenter.ErrorResponse(c, http.StatusUnauthorized, exceptions.ErrUnauthorized)
+			return
+		} else if err == exceptions.ErrCartNotFound {
+			presenter.ErrorResponse(c, http.StatusNotFound, exceptions.ErrCartNotFound)
+			return
 		}
 		presenter.ErrorResponse(c, http.StatusInternalServerError, exceptions.ErrInternalServerError)
 		return

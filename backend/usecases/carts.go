@@ -60,7 +60,16 @@ func (c CartUsecase) DeleteCartByID(id int64) error {
 	if id == 0 {
 		return exceptions.ErrBadRequest
 	}
-	err := c.Repo.DeleteCartByID(id)
+
+	cart, err := c.Repo.FetchCartByID(id)
+	if err != nil {
+		return err
+	}
+	if cart == (domains.Cart{}) || cart.ID == 0 {
+		return exceptions.ErrCartNotFound
+	}
+
+	err = c.Repo.DeleteCartByID(id)
 	if err != nil {
 		return err
 	}
