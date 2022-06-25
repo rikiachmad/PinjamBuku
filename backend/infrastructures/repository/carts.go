@@ -43,6 +43,9 @@ func (u *CartRepository) FetchCartByID(id int64) (domains.Cart, error) {
 	)
 
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return domains.Cart{}, exceptions.ErrCartNotFound
+		}
 		return domains.Cart{}, err
 	}
 

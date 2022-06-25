@@ -1,6 +1,8 @@
 package usecases
 
 import (
+	"fmt"
+
 	"github.com/rg-km/final-project-engineering-16/backend/commons/exceptions"
 	"github.com/rg-km/final-project-engineering-16/backend/domains"
 )
@@ -15,6 +17,14 @@ func NewCartUsecase(repo domains.CartRepository) CartUsecase {
 	}
 }
 
+func (c CartUsecase) GetCartByID(id int64) (domains.Cart, error) {
+	cart, err := c.Repo.FetchCartByID(id)
+	if err != nil {
+		return cart, err
+	}
+	return cart, nil
+}
+
 func (c CartUsecase) ShowCartByUserID(userID int64) ([]domains.Cart, error) {
 	if userID == 0 {
 		return nil, exceptions.ErrUnauthorized
@@ -23,6 +33,7 @@ func (c CartUsecase) ShowCartByUserID(userID int64) ([]domains.Cart, error) {
 	if err != nil {
 		return nil, err
 	}
+	fmt.Printf("%+v\n", carts)
 	return carts, nil
 }
 

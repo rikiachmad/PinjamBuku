@@ -20,6 +20,7 @@ type CartRepository interface {
 }
 
 type CartUsecase interface {
+	GetCartByID(id int64) (Cart, error)
 	ShowCartByUserID(id int64) ([]Cart, error)
 	InsertToCart(userID, bookID int64) (Cart, error)
 	DeleteCartByID(id int64) error

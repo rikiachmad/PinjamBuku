@@ -134,7 +134,6 @@ func main() {
 	}
 
 	_, err = db.Exec(`
-<<<<<<< HEAD
 		CREATE TABLE IF NOT EXISTS book_categories (
 			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 			name VARCHAR(255) NOT NULL
@@ -183,11 +182,6 @@ func main() {
 	('AB003', '1', '1', 'Heartbreak Motel', 'Wawan', '250', '40', 'ini deskripsi heartbreak', '120000', 'heart.jpg', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 	('AB004', '2', '2', 'Sagaras', 'Tere Liye', '285', '89', 'ini deskripsi sagaras', '150000', 'sagaras.jpg', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 	('AB005', '1', '1', 'Nebula', 'Wati', '201', '30', 'ini deskripsi nebula', '98000', 'nebula.jpg', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-=======
-		INSERT INTO book_categories (name) 
-		VALUES 
-		("Umum"), ("Filsafat dan Psikologi"), ("Agama"), ("Sosial"), ("Bahasa"), ("Sains dan Matematika"), ("Teknologi"), ("Seni dan Rekreasi"), ("Literatur dan Sastra"), ("Sejarah dan Geografi")
->>>>>>> 361d3dd... feat: add several repositories function for book borrowing
 	`)
 
 	if err != nil {
