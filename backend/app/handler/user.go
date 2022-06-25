@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
@@ -48,7 +47,6 @@ func NewUserController(userUsercase domains.UserUsecase) UserController {
 }
 
 func (u *UserController) UpdateUserProfile(c *gin.Context) {
-	log.Println("tes")
 	paramsId := c.Param("id")
 
 	id, err := strconv.Atoi(paramsId)
@@ -76,4 +74,26 @@ func (u *UserController) UpdateUserProfile(c *gin.Context) {
 
 	responseFromDomain := presenter.FetchUpdateUser(res)
 	presenter.SuccessResponse(c, http.StatusOK, responseFromDomain)
+}
+
+func (u *UserController) GetUserDetail(c *gin.Context) {
+	paramsId := c.Param("id")
+
+	id, err := strconv.Atoi(paramsId)
+
+	if err != nil {
+		presenter.ErrorResponse(c, http.StatusInternalServerError, exceptions.ErrInternalServerError)
+		return
+	}
+
+	res, err := u.userUsecase.FetchUserByID(int64(id))
+
+	if err != nil {
+		presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
+		return
+	}
+
+	responseFromDomain := presenter.FetchUserDetail(res)
+	presenter.SuccessResponse(c, http.StatusOK, responseFromDomain)
+
 }

@@ -49,4 +49,5 @@ type AuthUsecase interface {
 
 type UserUsecase interface {
 	UpdateUserProfile(user UpdateUser, id int64) (UpdateUser, error)
+	FetchUserByID(id int64) (User, error)
 }

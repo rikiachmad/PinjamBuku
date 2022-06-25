@@ -20,6 +20,9 @@ func InitRoutesUser(db *sql.DB, route *gin.Engine) {
 		apiv1.Use(middleware.AuthorizeJWT(), middleware.AuthMiddleware("user"))
 		user := apiv1.Group("/user")
 		{
+			user.GET("/:id", middleware.ValidateIDMiddleware(), userController.GetUserDetail)
+		}
+		{
 			user.PUT("/:id", middleware.ValidateIDMiddleware(), userController.UpdateUserProfile)
 		}
 	}

@@ -24,9 +24,8 @@ func (u *UserRepository) FetchUserByID(id int64) (domains.User, error) {
 	u.address,
 	u.email,
 	u.phone_number,
-	u.verified_date,
-	ur.name
-	FROM users u INNER JOIN user_roles ur ON u.role_id = ur.id WHERE u.id = ?`
+	u.picture_profile 
+	FROM users u WHERE u.id = ?`
 
 	user := domains.User{}
 
@@ -37,8 +36,7 @@ func (u *UserRepository) FetchUserByID(id int64) (domains.User, error) {
 		&user.Address,
 		&user.Email,
 		&user.PhoneNumber,
-		&user.Verified,
-		&user.Role,
+		&user.Photo,
 	)
 
 	if err != nil {

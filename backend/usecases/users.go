@@ -68,3 +68,12 @@ func (u *UserUsecase) UpdateUserProfile(user domains.UpdateUser, id int64) (doma
 
 	return userReturn, nil
 }
+
+func (u *UserUsecase) FetchUserByID(id int64) (domains.User, error) {
+	user, err := u.Repo.FetchUserByID(id)
+	if err != nil {
+		return domains.User{}, nil
+	}
+
+	return user, nil
+}
