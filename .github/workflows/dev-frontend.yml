@@ -1,9 +1,9 @@
-name: Deploy Frontend (Branch main)
+name: Deploy Frontend (Branch dev-frontend)
 
 on:
   push:
     branches:
-      - main
+      - dev-frontend
     paths:
       - "pinjam-buku/**"
 
@@ -37,7 +37,7 @@ jobs:
           context: ./pinjam-buku
           file: ./pinjam-buku/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/pinjambuku-frontend:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/dev-pinjambuku-frontend:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -52,4 +52,4 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            bash /home/pinjambuku/production/deploy-frontend.sh
+            bash /home/pinjambuku/development/deploy-frontend.sh
