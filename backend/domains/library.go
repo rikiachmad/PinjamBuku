@@ -41,6 +41,11 @@ type LibraryRepository interface {
 	GetAllLibrary() ([]Library, error)
 	GetLibraryByID(id int64) (Library, error)
 	UpdateLibraryProfileByID(id int64, name, address, phoneNumber, photo string) (UpdateLibrary, error)
+	CheckExistLibrary(id int64) bool
+	GetAllBookById(id int64) ([]Book, error)
+	CreateBook(katalogId, title, author, description, cover string, pageNumber, stock, deposit, categoryId, libraryId int64) error
+	UpdateBook(katalogId, title, author, description, cover string, pageNumber, stock, deposit, categoryId, id, libraryId int64) error
+	CheckBook(id int64) bool
 }
 
 type LibraryAuthUsecase interface {
@@ -51,4 +56,7 @@ type LibraryUsecase interface {
 	GetAllLibrary() ([]Library, error)
 	GetLibraryByID(id int64) (Library, error)
 	UpdateLibraryProfileByID(library UpdateLibrary, id int64) (UpdateLibrary, error)
+	GetAllBookById(id int64) ([]Book, error)
+	CreateBook(book Book, id int64) error
+	UpdateBook(book Book, id int64) error
 }

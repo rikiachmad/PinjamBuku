@@ -4,6 +4,7 @@ import "github.com/rg-km/final-project-engineering-16/backend/domains"
 
 type Book struct {
 	ID           int64  `json:"id"`
+	KatalogId    string `json:"katalogId"`
 	Title        string `json:"title"`
 	Author       string `json:"author"`
 	Description  string `json:"description"`
@@ -18,6 +19,7 @@ type Book struct {
 func FetchBookDefault(b domains.Book) Book {
 	return Book{
 		ID:           b.ID,
+		KatalogId:    b.KatalogId,
 		Title:        b.Title,
 		Author:       b.Author,
 		Description:  b.Description,

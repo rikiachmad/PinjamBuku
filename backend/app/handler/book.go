@@ -16,7 +16,23 @@ type idBook struct {
 	Id int64 `json:"id" form:"id"`
 }
 
-type insertBook struct {
+type InsertBook struct {
+	KatalogId   string `json:"katalogId" form:"katalogId"`
+	Title       string `json:"title" form:"title"`
+	Author      string `json:"author" form:"author"`
+	Description string `json:"description" form:"description"`
+	Cover       string `json:"cover" form:"cover"`
+	PageNumber  int64  `json:"pageNumber" form:"pageNumber"`
+	Stock       int64  `json:"stock" form:"stock"`
+	Deposit     int64  `json:"deposit" form:"deposit"`
+	CategoryId  int64  `json:"categoryId" form:"categoryId"`
+	LibraryId   int64  `json:"libraryId" form:"libraryId"`
+	IsPublish   bool   `json:"isPublish" form:"isPublish"`
+}
+
+type Books struct {
+	Id          int64  `json:"id" form:"id"`
+	KatalogId   string `json:"katalogId" form:"katalogId"`
 	Title       string `json:"title" form:"title"`
 	Author      string `json:"author" form:"author"`
 	Description string `json:"description" form:"description"`
@@ -35,24 +51,23 @@ func (i *idBook) ToGetByIdBookDomain() domains.Book {
 	}
 }
 
-func (d *insertBook) ToInsertBookDomain() domains.CreateBook {
-	return domains.CreateBook{
-		Title:       d.Title,
-		Author:      d.Author,
-		Description: d.Description,
-		Cover:       d.Cover,
-		PageNumber:  d.PageNumber,
-		Stock:       d.Stock,
-		Deposit:     d.Deposit,
-		CategoryId:  d.CategoryId,
-		LibraryId:   d.LibraryId,
-		IsPublish:   d.IsPublish,
+func (b *Books) ToInsertBookDomain() domains.Book {
+	return domains.Book{
+		ID:          b.Id,
+		KatalogId:   b.KatalogId,
+		Title:       b.Title,
+		Author:      b.Author,
+		Description: b.Description,
+		Cover:       b.Cover,
+		PageNumber:  b.PageNumber,
+		Stock:       b.Stock,
+		Deposit:     b.Deposit,
+		CategoryId:  b.CategoryId,
+		LibraryId:   b.LibraryId,
+		IsPublish:   b.IsPublish,
 	}
 }
 
-// func ToGetAllBookDomain() domains.Book {
-// 	return
-// }
 type BookController struct {
 	bookUsecase domains.BookUsecase
 }
@@ -108,26 +123,6 @@ func (b BookController) GetAllBook(c *gin.Context) {
 	}
 
 	presenter.SuccessResponse(c, http.StatusOK, response)
-}
-
-func (b BookController) InsertBook(c *gin.Context) {
-	req := insertBook{}
-
-	if err := c.ShouldBindJSON(&req); err != nil {
-		presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
-		return
-	}
-
-	domain := req.ToInsertBookDomain()
-
-	_, err := b.bookUsecase.Insert(domain)
-
-	if err != nil {
-		presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
-		return
-	}
-
-	presenter.SuccessResponse(c, http.StatusCreated, nil)
 }
 
 func (b BookController) GetSearchBook(c *gin.Context) {

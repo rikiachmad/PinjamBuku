@@ -145,3 +145,17 @@ func (l *LibraryRepository) UpdateLibraryProfileByID(id int64, name, address, ph
 
 	return library, nil
 }
+
+func (l *LibraryRepository) CheckExistLibrary(id int64) bool {
+	var res int64
+	sqlStmt := `SELECT id FROM libraries WHERE id = ?`
+
+	err := l.db.QueryRow(sqlStmt, id).Scan(&res)
+
+	if err != nil {
+		if err != sql.ErrNoRows {
+			return false
+		}
+	}
+	return res == id
+}

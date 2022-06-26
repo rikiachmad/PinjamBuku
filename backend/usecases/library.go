@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"github.com/rg-km/final-project-engineering-16/backend/app/middleware"
+	"github.com/rg-km/final-project-engineering-16/backend/commons/exceptions"
 	"github.com/rg-km/final-project-engineering-16/backend/domains"
 )
 
@@ -63,4 +64,43 @@ func (l *LibraryUsecase) UpdateLibraryProfileByID(library domains.UpdateLibrary,
 	}
 
 	return library, nil
+}
+
+func (l *LibraryUsecase) GetAllBookById(id int64) ([]domains.Book, error) {
+	ok := l.Repo.CheckExistLibrary(id)
+
+	if ok {
+		books, err := l.Repo.GetAllBookById(id)
+		if err != nil {
+			return []domains.Book{}, exceptions.ErrBadRequest
+		}
+		return books, nil
+	}
+
+	return []domains.Book{}, exceptions.ErrBadRequest
+}
+
+func (l *LibraryUsecase) CreateBook(b domains.Book, idLibrary int64) error {
+	err := l.Repo.CreateBook(b.KatalogId, b.Title, b.Author, b.Description, b.Cover, b.PageNumber, b.Stock, b.Deposit, b.CategoryId, idLibrary)
+
+	if err != nil {
+		return exceptions.ErrBadRequest
+	}
+
+	return nil
+}
+
+func (l *LibraryUsecase) UpdateBook(b domains.Book, idLibrary int64) error {
+	ok := l.Repo.CheckBook(b.ID)
+
+	if ok {
+		err := l.Repo.UpdateBook(b.KatalogId, b.Title, b.Author, b.Description, b.Cover, b.PageNumber, b.Stock, b.Deposit, b.CategoryId, b.ID, idLibrary)
+
+		if err != nil {
+			return exceptions.ErrBadRequest
+		}
+		return nil
+	}
+
+	return exceptions.ErrBadRequest
 }
