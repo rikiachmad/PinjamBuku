@@ -5,12 +5,14 @@ import (
 )
 
 type Login struct {
+	ID       int64  `json:"id"`
 	Email    string `json:"email"`
 	Fullname string `json:"fullname"`
 	Token    string `json:"token,omitempty"`
 }
 
 type LoginLibrary struct {
+	ID    int64  `json:"id"`
 	Email string `json:"email"`
 	Name  string `json:"name"`
 	Token string `json:"token,omitempty"`
@@ -18,6 +20,7 @@ type LoginLibrary struct {
 
 func LoginFromDomain(u domains.User) Login {
 	return Login{
+		ID:       u.ID,
 		Email:    u.Email,
 		Fullname: u.Fullname,
 		Token:    u.Token,
@@ -26,6 +29,7 @@ func LoginFromDomain(u domains.User) Login {
 
 func LoginLibraryFromDomain(l domains.Library) LoginLibrary {
 	return LoginLibrary{
+		ID:    l.ID,
 		Email: l.Email,
 		Name:  l.Name,
 		Token: l.Token,
