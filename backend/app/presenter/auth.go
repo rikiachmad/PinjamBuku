@@ -33,7 +33,7 @@ func LoginLibraryFromDomain(l domains.Library) LoginLibrary {
 }
 
 type CreateUser struct {
-	ID		    int64  `json:"id"`
+	ID          int64  `json:"id"`
 	Email       string `json:"email"`
 	Fullname    string `json:"fullname,omitempty"`
 	Address     string `json:"address,omitempty"`
@@ -46,7 +46,7 @@ type CreateUser struct {
 
 func CreateUserFromDomain(u domains.User) CreateUser {
 	return CreateUser{
-		ID:		     u.ID,
+		ID:          u.ID,
 		Email:       u.Email,
 		Fullname:    u.Fullname,
 		Address:     u.Address,
