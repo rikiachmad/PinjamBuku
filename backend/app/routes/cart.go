@@ -15,6 +15,11 @@ func InitRoutesCart(db *sql.DB, route *gin.Engine) {
 	cartUsecase := usecases.NewCartUsecase(cartRepository)
 	cartController := handler.NewCartController(cartUsecase)
 
+	borrowingRepository := repository.NewBorrowingRepository(db)
+	bookRepository := repository.NewBookRepository(db)
+	borrowingUsecase := usecases.NewBorrowingUsecase(borrowingRepository, bookRepository, cartRepository)
+	borrowingController := handler.NewBorrowingController(borrowingUsecase)
+
 	apiv1 := route.Group("/api/v1")
 	{
 		apiv1.Use(middleware.AuthorizeJWT(), middleware.AuthMiddleware("user"))
@@ -23,6 +28,7 @@ func InitRoutesCart(db *sql.DB, route *gin.Engine) {
 			cart.GET("/", cartController.ShowCartByUserID)
 			cart.GET("/:id", cartController.GetCartByID)
 			cart.POST("/", cartController.InsertToCart)
+			cart.POST("/checkout", borrowingController.InsertToBorrowing)
 			cart.DELETE("/:id", cartController.DeleteCartByID)
 		}
 
