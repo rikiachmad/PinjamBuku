@@ -2,7 +2,6 @@ package handler
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -124,28 +123,6 @@ func (b BookController) GetAllBook(c *gin.Context) {
 	}
 
 	presenter.SuccessResponse(c, http.StatusOK, response)
-}
-
-func (b BookController) InsertBook(c *gin.Context) {
-	req := insertBook{}
-	
-	fmt.Printf("%+v\n", req)
-	if err := c.ShouldBindJSON(&req); err != nil {
-		presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
-		return
-	}
-
-	domain := req.ToInsertBookDomain()
-	fmt.Printf("%+v\n", domain)
-
-	_, err := b.bookUsecase.Insert(domain)
-
-	if err != nil {
-		presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
-		return
-	}
-
-	presenter.SuccessResponse(c, http.StatusCreated, nil)
 }
 
 func (b BookController) GetSearchBook(c *gin.Context) {
