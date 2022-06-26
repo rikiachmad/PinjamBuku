@@ -1,0 +1,26 @@
+name: Deploy Backend (Branch dev-backend)
+
+on:
+  push:
+    branches:
+      - dev-backend
+    paths:
+      - "backend/**"
+
+defaults:
+  run:
+    working-directory: ./backend
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            bash /home/pinjambuku/development/deploy-backend.sh
