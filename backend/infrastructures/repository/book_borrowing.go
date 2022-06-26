@@ -16,8 +16,14 @@ func NewBorrowingRepository(db *sql.DB) domains.BorrowingRepository {
 }
 
 func (u *BorrowingRepository) FetchBorrowingByID(id int64) (domains.Borrowing, error) {
-	sqlStmt := `SELECT id, user_id, status_id, total_deposit, total_cost, borrowing_date, due_date, finish_date, created_at, deleted_at 
-	FROM borrowings WHERE id = ?`
+	sqlStmt := `SELECT 
+		bb.id, bb.user_id, bb.status_id, bb.total_deposit, bb.total_cost, bb.borrowing_date, bb.due_date, bb.finish_date, 
+		bs.id, bs.status,
+		u.id, u.email
+	FROM book_borrowing bb
+	INNER JOIN borrowing_status bs ON bb.status_id = bs.id
+	INNER JOIN users u ON bb.user_id = u.id
+	WHERE bb.id = ?`
 
 	borrowing := domains.Borrowing{}
 
@@ -31,8 +37,10 @@ func (u *BorrowingRepository) FetchBorrowingByID(id int64) (domains.Borrowing, e
 		&borrowing.BorrowingDate,
 		&borrowing.DueDate,
 		&borrowing.FinishDate,
-		&borrowing.CreatedAt,
-		&borrowing.DeletedAt,
+		&borrowing.Status.ID,
+		&borrowing.Status.Status,
+		&borrowing.User.ID,
+		&borrowing.User.Email,
 	)
 
 	if err != nil {
@@ -90,12 +98,12 @@ func (u *BorrowingRepository) FetchBorrowingByUserID(userID int64) ([]domains.Bo
 		bs.status,
 		b.id, b.title, b.stock, b.deposit,
 		l.id, l.name, l.address
-	FROM borrowings bb
+	FROM book_borrowing bb
 	INNER JOIN book_borrowing_list bbl ON bb.id = bbl.borrowing_id
 	INNER JOIN borrowing_status bs ON bb.status_id = bs.id
 	INNER JOIN books b ON bbl.book_id = b.id
 	INNER JOIN libraries l ON b.library_id = l.id
-	WHERE user_id = ?`
+	WHERE bb.user_id = ?`
 
 	book_borrowing := []domains.Borrowing{}
 
@@ -137,13 +145,13 @@ func (u *BorrowingRepository) FetchBorrowingByUserID(userID int64) ([]domains.Bo
 
 func (u *BorrowingRepository) InsertToBorrowing(userID int64, bookID []int64, totalDeposit int64, totalCost int64) (domains.Borrowing, error) {
 	sqlStmt := `INSERT INTO book_borrowing
-	(user_id, status_id, total_deposit, total_cost, borrowing_date, due_date, finish_date, created_at, deleted_at)
+	(user_id, status_id, total_deposit, total_cost, borrowing_date, due_date, finish_date, created_at, updated_at)
 	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-	RETURNING id, user_id, status_id, total_deposit, total_cost, borrowing_date, due_date, finish_date, created_at, deleted_at`
+	RETURNING id, user_id, status_id, total_deposit, total_cost, borrowing_date, due_date, finish_date, created_at, updated_at`
 
 	borrowing := domains.Borrowing{}
 
-	err := u.db.QueryRow(sqlStmt, userID, 1, totalDeposit, totalCost, time.Now(), time.Now().AddDate(0, 0, 21), time.Time{}, time.Now(), time.Time{}).Scan(
+	err := u.db.QueryRow(sqlStmt, userID, 1, totalDeposit, totalCost, time.Now(), time.Now().AddDate(0, 0, 21), time.Time{}, time.Now(), time.Now()).Scan(
 		&borrowing.ID,
 		&borrowing.UserID,
 		&borrowing.StatusID,
@@ -153,7 +161,7 @@ func (u *BorrowingRepository) InsertToBorrowing(userID int64, bookID []int64, to
 		&borrowing.DueDate,
 		&borrowing.FinishDate,
 		&borrowing.CreatedAt,
-		&borrowing.DeletedAt,
+		&borrowing.UpdatedAt,
 	)
 
 	if err != nil {
@@ -161,16 +169,16 @@ func (u *BorrowingRepository) InsertToBorrowing(userID int64, bookID []int64, to
 	}
 
 	sqlStmt = `INSERT INTO book_borrowing_list
-	(borrowing_id, book_id)
-	VALUES (?, ?)`
+	(borrowing_id, book_id, created_at)
+	VALUES (?, ?, ?)`
 
 	for _, bookID := range bookID {
-		_, err := u.db.Exec(sqlStmt, userID, bookID)
+		_, err := u.db.Exec(sqlStmt, borrowing.ID, bookID, time.Now())
 		if err != nil {
 			return domains.Borrowing{}, err
 		}
 	}
-	
+
 	return borrowing, nil
 }
 

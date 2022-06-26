@@ -348,3 +348,22 @@ func (l LibraryRepository) CheckBook(id int64) bool {
 	}
 	return res == id
 }
+
+func (b *BookRepository) GetTotalDeposit(BookIDs []int64) (int64, error) {
+	var totalDeposit int
+
+	sqlStmt := `SELECT 
+		b.deposit
+	FROM books b
+	WHERE b.id = ?`
+
+	for _, id := range BookIDs {
+		deposit := 0
+		err := b.db.QueryRow(sqlStmt, id).Scan(&deposit)
+		if err != nil {
+			return 0, err
+		}
+		totalDeposit += deposit
+	}
+	return int64(totalDeposit), nil
+}

@@ -19,7 +19,7 @@ type Borrowing struct {
 	FinishDate    string          `db:"finish_date"`
 	Status        BorrowingStatus `db:"status"`
 	CreatedAt     string          `db:"created_at"`
-	DeletedAt     string          `db:"deleted_at"`
+	UpdatedAt     string          `db:"updated_at"`
 }
 
 type BorrowingWithBook struct {
@@ -37,6 +37,6 @@ type BorrowingRepository interface {
 
 type BorrowingUsecase interface {
 	ShowBorrowingByUserID(id int64) ([]Borrowing, error)
-	InsertToBorrowing(userID int64, bookIDs []int64, totalCost int64) (BorrowingWithBook, error)
+	InsertToBorrowing(userID int64, cartIDs []int64, totalCost int64) (BorrowingWithBook, error)
 	DeleteBorrowingByID(id int64) error
 }
