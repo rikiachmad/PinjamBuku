@@ -188,6 +188,63 @@ func main() {
 		panic(err)
 	}
 
+	_, err = db.Exec(`
+		CREATE TABLE IF NOT EXISTS borrowing_status (
+			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+			status VARCHAR(255) NOT NULL
+		)
+	`)
+
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = db.Exec(`
+		INSERT INTO borrowing_status (status) 
+		VALUES 
+		("Menunggu Persetujuan"), ("Disetujui"), ("Sedang Dipinjam"), ("Selesai"), ("Ditolak")
+	`)
+
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = db.Exec(`
+		CREATE TABLE IF NOT EXISTS book_borrowing (
+			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+			user_id INTEGER NOT NULL,
+			status_id INTEGER NOT NULL,
+			total_cost BIGINT NOT NULL,
+			total_deposit BIGINT NOT NULL,
+			borrowing_date DATETIME NOT NULL,
+			due_date DATETIME,
+			finish_date DATETIME,
+			created_at DATETIME,
+			updated_at DATETIME,
+		FOREIGN KEY (user_id) REFERENCES users(id),
+		FOREIGN KEY (status_id) REFERENCES borrowing_status(id)
+		)
+	`)
+
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = db.Exec(`
+		CREATE TABLE IF NOT EXISTS book_borrowing_list (
+			id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+			book_id INTEGER NOT NULL,
+			borrowing_id INTEGER NOT NULL,
+			created_at DATETIME,
+			deleted_at DATETIME,
+		FOREIGN KEY (book_id) REFERENCES books(id),
+		FOREIGN KEY (borrowing_id) REFERENCES book_borrowing(id)
+		)
+	`)
+
+	if err != nil {
+		panic(err)
+	}
 }
 
 func Rollback(db *sql.DB) {
@@ -228,6 +285,23 @@ func Rollback(db *sql.DB) {
 	}
 
 	sqlStmt = `DROP TABLE carts;`
+	_, err = db.Exec(sqlStmt)
+	if err != nil {
+		panic(err)
+	}
+
+	sqlStmt = `DROP TABLE borrowing_status;`
+	_, err = db.Exec(sqlStmt)
+	if err != nil {
+		panic(err)
+	}
+
+	sqlStmt = `DROP TABLE book_borrowing;`
+	_, err = db.Exec(sqlStmt)
+	if err != nil {
+		panic(err)
+	}
+	sqlStmt = `DROP TABLE book_borrowing_list;`
 	_, err = db.Exec(sqlStmt)
 	if err != nil {
 		panic(err)

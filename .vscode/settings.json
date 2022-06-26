@@ -1,4 +1,9 @@
 {
   "go.inferGopath": false,
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "[go]": {
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "golang.go"
+  }
 }

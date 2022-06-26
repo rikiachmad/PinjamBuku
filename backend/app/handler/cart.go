@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -33,17 +32,35 @@ func NewCartController(cartUsecase domains.CartUsecase) CartController {
 	}
 }
 
-func (cc CartController) ShowCartByUserID(c *gin.Context) {
-	req := Cart{}
-	if err := c.Bind(&req); err != nil {
+func (cc CartController) GetCartByID(c *gin.Context) {
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
 		presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
 		return
 	}
-	
-	fmt.Printf("userID: %d\n", req)
-	domain := req.ToCartDomain()
-	fmt.Printf("userID: %d\n", domain.UserID)
-	res, err := cc.cartUsecase.ShowCartByUserID(domain.UserID)
+
+	cart, err := cc.cartUsecase.GetCartByID(id)
+	if err != nil {
+		if err == exceptions.ErrBadRequest {
+				presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
+				return
+			} else if err == exceptions.ErrUnauthorized {
+				presenter.ErrorResponse(c, http.StatusUnauthorized, exceptions.ErrUnauthorized)
+				return
+			} else if err == exceptions.ErrCartNotFound {
+				presenter.ErrorResponse(c, http.StatusNotFound, exceptions.ErrCartNotFound)
+				return
+			}
+			presenter.ErrorResponse(c, http.StatusInternalServerError, exceptions.ErrInternalServerError)
+			return
+		}
+	resFromDomain := presenter.CartFromDomain(cart)
+	presenter.SuccessResponse(c, http.StatusOK, resFromDomain)
+}
+
+func (cc CartController) ShowCartByUserID(c *gin.Context) {
+	userID := int64(c.Keys["id"].(float64))
+	res, err := cc.cartUsecase.ShowCartByUserID(userID)
 	if err != nil {
 		if err == exceptions.ErrBadRequest {
 			presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
@@ -67,8 +84,9 @@ func (cc CartController) InsertToCart(c *gin.Context) {
 		return
 	}
 	
+	userID := int64(c.Keys["id"].(float64))
 	domain := req.ToCartDomain()
-	res, err := cc.cartUsecase.InsertToCart(domain.UserID, domain.BookID)
+	res, err := cc.cartUsecase.InsertToCart(userID, domain.BookID)
 	if err != nil {
 		if err == exceptions.ErrBadRequest {
 			presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
@@ -103,6 +121,12 @@ func (cc CartController) DeleteCartByID(c *gin.Context) {
 	if err != nil {
 		if err == exceptions.ErrBadRequest {
 			presenter.ErrorResponse(c, http.StatusBadRequest, exceptions.ErrBadRequest)
+			return
+		} else if err == exceptions.ErrUnauthorized {
+			presenter.ErrorResponse(c, http.StatusUnauthorized, exceptions.ErrUnauthorized)
+			return
+		} else if err == exceptions.ErrCartNotFound {
+			presenter.ErrorResponse(c, http.StatusNotFound, exceptions.ErrCartNotFound)
 			return
 		}
 		presenter.ErrorResponse(c, http.StatusInternalServerError, exceptions.ErrInternalServerError)

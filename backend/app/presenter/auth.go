@@ -33,18 +33,20 @@ func LoginLibraryFromDomain(l domains.Library) LoginLibrary {
 }
 
 type CreateUser struct {
+	ID          int64  `json:"id"`
 	Email       string `json:"email"`
-	Fullname    string `json:"fullname"`
-	Address     string `json:"address"`
-	PhoneNumber string `json:"phone_number"`
-	Role        string `json:"role"`
-	Photo       string `json:"photo"`
-	CreatedAt   string `json:"created_at"`
-	UpdatedAt   string `json:"updated_at"`
+	Fullname    string `json:"fullname,omitempty"`
+	Address     string `json:"address,omitempty"`
+	PhoneNumber string `json:"phone_number,omitempty"`
+	Role        string `json:"role,omitempty"`
+	Photo       string `json:"photo,omitempty"`
+	CreatedAt   string `json:"created_at,omitempty"`
+	UpdatedAt   string `json:"updated_at,omitempty"`
 }
 
 func CreateUserFromDomain(u domains.User) CreateUser {
 	return CreateUser{
+		ID:          u.ID,
 		Email:       u.Email,
 		Fullname:    u.Fullname,
 		Address:     u.Address,

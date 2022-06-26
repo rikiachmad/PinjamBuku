@@ -5,28 +5,27 @@ import (
 )
 
 type InsertCart struct {
-	ID		int64 `json:"id"`
-	BookID  int64 `json:"bookId"`
-	UserID	int64 `json:"userId"`
+	ID     int64 `json:"id"`
+	BookID int64 `json:"bookId"`
+	UserID int64 `json:"userId"`
 }
 
 func InsertCartFromDomain(c domains.Cart) InsertCart {
 	return InsertCart{
-		ID : c.ID,
-		BookID: 		c.BookID,
-		UserID:			c.UserID,
+		ID:     c.ID,
+		BookID: c.BookID,
+		UserID: c.UserID,
 	}
 }
 
 type Cart struct {
-	ID		  int64  	 `json:"id"`
-	BookID 	  int64 	 `json:"bookId"`
-	UserID 	  int64 	 `json:"userId"`
-	User 	  CreateUser `json:"user"`
-	Book 	  Book 		 `json:"book"`
-	Photo	  string     `json:"photo"`
-	CreatedAt string     `json:"createdAt"`
-	DeletedAt string     `json:"deletedAt"`
+	ID        int64      `json:"id"`
+	BookID    int64      `json:"bookId,omitempty"`
+	UserID    int64      `json:"userId,omitempty"`
+	User      CreateUser `json:"user"`
+	Book      Book       `json:"book"`
+	CreatedAt string     `json:"createdAt,omitempty"`
+	DeletedAt string     `json:"deletedAt,omitempty"`
 }
 
 func CartFromDomain(u domains.Cart) Cart {
@@ -35,7 +34,7 @@ func CartFromDomain(u domains.Cart) Cart {
 		UserID:    u.UserID,
 		BookID:    u.BookID,
 		User:      CreateUserFromDomain(u.User),
-		Book: 	   FetchBookDefault(u.Book),
+		Book:      FetchBookDefault(u.Book),
 		CreatedAt: u.CreatedAt,
 		DeletedAt: u.DeletedAt,
 	}
