@@ -17,6 +17,7 @@ type CartRepository interface {
 	InsertToCart(userID, bookID int64) (Cart, error)
 	DeleteCartByID(id int64) error
 	DeleteCartByUserID(userID int64) error
+	DeleteCartByUserIDAndBookIDs(userID int64, bookIDs []int64) error
 }
 
 type CartUsecase interface {

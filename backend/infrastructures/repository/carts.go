@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"time"
 
 	"github.com/rg-km/final-project-engineering-16/backend/commons/exceptions"
 	domains "github.com/rg-km/final-project-engineering-16/backend/domains"
@@ -127,11 +128,13 @@ func (u *CartRepository) FetchCartByUserID(userID int64) ([]domains.Cart, error)
 }
 
 func (u *CartRepository) InsertToCart(userID int64, bookID int64) (domains.Cart, error) {
-	sqlStmt := `INSERT INTO carts (user_id, book_id) VALUES (?, ?) RETURNING id, user_id, book_id`
+	sqlStmt := `INSERT INTO carts (user_id, book_id, created_at) 
+	VALUES (?, ?, ?) 
+	RETURNING id, user_id, book_id`
 
 	cart := domains.Cart{}
 
-	err := u.db.QueryRow(sqlStmt, userID, bookID).Scan(
+	err := u.db.QueryRow(sqlStmt, userID, bookID, time.Now(), time.Now()).Scan(
 		&cart.ID,
 		&cart.UserID,
 		&cart.BookID,
@@ -160,6 +163,19 @@ func (u *CartRepository) DeleteCartByUserID(userID int64) error {
 	_, err := u.db.Exec(sqlStmt, userID)
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (u *CartRepository) DeleteCartByUserIDAndBookIDs(userID int64, bookIDs []int64) error {
+	sqlStmt := `DELETE FROM carts WHERE user_id = ? AND book_id = ?`
+
+	for _, bookID := range bookIDs {
+		_, err := u.db.Exec(sqlStmt, userID, bookID)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
