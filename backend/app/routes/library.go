@@ -19,7 +19,7 @@ func InitRoutesLibrary(db *sql.DB, route *gin.Engine) {
 
 	apiv1 := route.Group("/api/v1")
 	{
-		apiv1.Use(middleware.AuthorizeJWT(), middleware.AuthMiddleware("library"))
+		// apiv1.Use(middleware.AuthorizeJWT(), middleware.AuthMiddleware("library"))
 		lib := apiv1.Group("/library")
 		{
 			lib.GET("/", libraryController.GetAllLibrary)
@@ -28,16 +28,16 @@ func InitRoutesLibrary(db *sql.DB, route *gin.Engine) {
 			lib.GET("/:id", libraryController.GetLibraryByID)
 		}
 		{
-			lib.PUT("/:id", middleware.ValidateIDMiddleware(), libraryController.UpdateLibraryProfileByID)
+			lib.PUT("/:id", middleware.AuthorizeJWT(), middleware.AuthMiddleware("library"), middleware.ValidateIDMiddleware(), libraryController.UpdateLibraryProfileByID)
 		}
 		{
-			lib.GET("/book/:id", middleware.ValidateIDMiddleware(), libraryController.GetAllBookById)
+			lib.GET("/book/:id", middleware.AuthorizeJWT(), middleware.AuthMiddleware("library"), middleware.ValidateIDMiddleware(), libraryController.GetAllBookById)
 		}
 		{
-			lib.POST("/book/:id", middleware.ValidateIDMiddleware(), libraryController.InsertBook)
+			lib.POST("/book/:id", middleware.AuthorizeJWT(), middleware.AuthMiddleware("library"), middleware.ValidateIDMiddleware(), libraryController.InsertBook)
 		}
 		{
-			lib.PUT("/book/:id", middleware.ValidateIDMiddleware(), libraryController.UpdateBook)
+			lib.PUT("/book/:id", middleware.AuthorizeJWT(), middleware.AuthMiddleware("library"), middleware.ValidateIDMiddleware(), libraryController.UpdateBook)
 		}
 	}
 
